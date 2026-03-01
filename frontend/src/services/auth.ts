@@ -5,7 +5,7 @@ export interface AuthResult {
   userId: string;
   email: string;
   displayName: string;
-  householdId: string;
+  householdId: string | null;
 }
 
 export interface UserProfile {
@@ -13,7 +13,7 @@ export interface UserProfile {
   email: string;
   displayName: string;
   locale: string;
-  householdId: string;
+  householdId: string | null;
 }
 
 export const register = (data: { email: string; password: string; displayName: string }) =>
