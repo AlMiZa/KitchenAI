@@ -46,6 +46,24 @@ public class ExpiryNotificationJob(IAppDbContext db, ILogger<ExpiryNotificationJ
 {
     private const int DefaultThresholdDays = 3;
 
+    /// <summary>Parses the item ID from a notification payload, returning <see langword="null"/> on failure.</summary>
+    private Guid? TryGetItemIdFromPayload(Notification notification)
+    {
+        try
+        {
+            using var doc = System.Text.Json.JsonDocument.Parse(notification.Payload ?? "{}");
+
+            return doc.RootElement.TryGetProperty("itemId", out var prop)
+                ? prop.GetGuid()
+                : null;
+        }
+        catch (Exception ex)
+        {
+            logger.LogWarning(ex, "Could not parse itemId from notification {NotificationId} payload.", notification.Id);
+            return null;
+        }
+    }
+
     /// <summary>Creates <see cref="Notification"/> records for items expiring within the threshold.</summary>
     public async Task RunAsync(CancellationToken cancellationToken = default)
     {
@@ -64,8 +82,20 @@ public class ExpiryNotificationJob(IAppDbContext db, ILogger<ExpiryNotificationJ
             return;
         }
 
-        // Group by household and create one notification per expiring item
+        // Determine which items already have an undelivered expiry notification so we don't create duplicates.
+        var pendingNotifications = await db.Notifications
+            .Where(n => n.Type == NotificationType.Expiring && !n.Delivered)
+            .ToListAsync(cancellationToken);
+
+        var alreadyNotifiedItemIds = pendingNotifications
+            .Select(TryGetItemIdFromPayload)
+            .Where(id => id.HasValue)
+            .Select(id => id!.Value)
+            .ToHashSet();
+
+        // Create one notification per expiring item that does not yet have a pending notification.
         var notifications = expiringItems
+            .Where(item => !alreadyNotifiedItemIds.Contains(item.Id))
             .Select(item => new Notification
             {
                 Id = Guid.NewGuid(),
@@ -82,9 +112,15 @@ public class ExpiryNotificationJob(IAppDbContext db, ILogger<ExpiryNotificationJ
             })
             .ToList();
 
+        if (notifications.Count == 0)
+        {
+            logger.LogInformation("All expiring items already have a pending notification — nothing to create.");
+            return;
+        }
+
         db.Notifications.AddRange(notifications);
         await db.SaveChangesAsync(cancellationToken);
 
-        logger.LogInformation("Created {Count} expiry notifications.", notifications.Count);
+        logger.LogInformation("Created {Count} expiry notification(s).", notifications.Count);
     }
 }
