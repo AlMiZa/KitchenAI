@@ -1,32 +1,41 @@
 import { useState } from 'react';
-import { useQuery, useMutation } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { apiFetch } from '../../services/api';
 
-interface ConfigEntry {
-  key: string;
-  description?: string;
-  isSet: boolean;
+interface AdminConfigDto {
+  geminiApiKeyConfigured: boolean;
+  llmModel: string;
+  version: string;
+}
+
+interface UpdateAdminConfigCommand {
+  geminiApiKeyPresent?: boolean;
+  llmModel?: string;
 }
 
 export default function ApiKeysPage() {
   const { t } = useTranslation();
-  const [editKey, setEditKey]     = useState('');
-  const [editValue, setEditValue] = useState('');
-  const [saved, setSaved]         = useState(false);
+  const queryClient = useQueryClient();
+  const [llmModel, setLlmModel] = useState('');
+  const [saved, setSaved]       = useState(false);
 
-  const { data: config = [], isLoading } = useQuery({
+  const { data: config, isLoading } = useQuery({
     queryKey: ['admin-config'],
-    queryFn: () => apiFetch<ConfigEntry[]>('/admin/config'),
+    queryFn: () => apiFetch<AdminConfigDto>('/admin/config'),
   });
 
   const updateMut = useMutation({
-    mutationFn: ({ key, value }: { key: string; value: string }) =>
-      apiFetch<void>('/admin/config', {
+    mutationFn: (cmd: UpdateAdminConfigCommand) =>
+      apiFetch<AdminConfigDto>('/admin/config', {
         method: 'POST',
-        body: JSON.stringify({ key, value }),
+        body: JSON.stringify(cmd),
       }),
-    onSuccess: () => { setSaved(true); setEditValue(''); setEditKey(''); },
+    onSuccess: (updated: AdminConfigDto) => {
+      queryClient.setQueryData(['admin-config'], updated);
+      setSaved(true);
+      setLlmModel('');
+    },
   });
 
   return (
@@ -42,7 +51,7 @@ export default function ApiKeysPage() {
         </div>
         {isLoading ? (
           <div className="p-5 text-gray-400 text-sm animate-pulse">{t('common.loading')}</div>
-        ) : (
+        ) : config ? (
           <table className="w-full text-sm">
             <thead className="border-b border-gray-100">
               <tr>
@@ -52,24 +61,36 @@ export default function ApiKeysPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-50">
-              {config.map((entry) => (
-                <tr key={entry.key} className="hover:bg-gray-50">
-                  <td className="px-5 py-3 font-mono text-gray-700">{entry.key}</td>
-                  <td className="px-5 py-3 font-mono text-gray-400">
-                    {entry.isSet ? t('admin.apiKeys.masked') : '—'}
-                  </td>
-                  <td className="px-5 py-3">
-                    {entry.isSet ? (
-                      <span className="text-green-600 text-xs font-medium">✓ Set</span>
-                    ) : (
-                      <span className="text-red-500 text-xs font-medium">✗ Missing</span>
-                    )}
-                  </td>
-                </tr>
-              ))}
+              <tr className="hover:bg-gray-50">
+                <td className="px-5 py-3 font-mono text-gray-700">LlmService:GeminiApiKey</td>
+                <td className="px-5 py-3 font-mono text-gray-400">
+                  {config.geminiApiKeyConfigured ? t('admin.apiKeys.masked') : '—'}
+                </td>
+                <td className="px-5 py-3">
+                  {config.geminiApiKeyConfigured ? (
+                    <span className="text-green-600 text-xs font-medium">✓ Set</span>
+                  ) : (
+                    <span className="text-red-500 text-xs font-medium">✗ Missing</span>
+                  )}
+                </td>
+              </tr>
+              <tr className="hover:bg-gray-50">
+                <td className="px-5 py-3 font-mono text-gray-700">LlmService:Model</td>
+                <td className="px-5 py-3 font-mono text-gray-600">{config.llmModel}</td>
+                <td className="px-5 py-3">
+                  <span className="text-green-600 text-xs font-medium">✓ Set</span>
+                </td>
+              </tr>
+              <tr className="hover:bg-gray-50">
+                <td className="px-5 py-3 font-mono text-gray-700">Version</td>
+                <td className="px-5 py-3 font-mono text-gray-600">{config.version}</td>
+                <td className="px-5 py-3">
+                  <span className="text-green-600 text-xs font-medium">✓ Set</span>
+                </td>
+              </tr>
             </tbody>
           </table>
-        )}
+        ) : null}
       </section>
 
       {/* Update config form */}
@@ -81,21 +102,14 @@ export default function ApiKeysPage() {
         <div className="space-y-3">
           <input
             type="text"
-            placeholder="Key"
-            value={editKey}
-            onChange={(e) => { setEditKey(e.target.value); setSaved(false); }}
-            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm font-mono"
-          />
-          <input
-            type="password"
-            placeholder="Value"
-            value={editValue}
-            onChange={(e) => { setEditValue(e.target.value); setSaved(false); }}
+            placeholder="LLM Model (e.g. gemini-1.5-flash)"
+            value={llmModel}
+            onChange={(e) => { setLlmModel(e.target.value); setSaved(false); }}
             className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm font-mono"
           />
           <button
-            onClick={() => updateMut.mutate({ key: editKey, value: editValue })}
-            disabled={updateMut.isPending || !editKey || !editValue}
+            onClick={() => updateMut.mutate({ llmModel: llmModel.trim() || undefined })}
+            disabled={updateMut.isPending || !llmModel.trim()}
             className="bg-yellow-500 hover:bg-yellow-600 disabled:opacity-50 text-white px-5 py-2 rounded-lg text-sm font-medium"
           >
             {t('common.save')}
