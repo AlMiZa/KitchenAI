@@ -1,20 +1,33 @@
+using KitchenAI.Application.Persistence;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
 namespace KitchenAI.Application.Admin;
 
-/// <summary>Returns the admin configuration status derived from application configuration.</summary>
-public class GetAdminConfigHandler(IConfiguration configuration)
+/// <summary>
+/// Returns the current admin configuration, reading <c>LlmModel</c> from the database first
+/// and falling back to <c>IConfiguration</c> then the default <c>"gemini-1.5-flash"</c>.
+/// </summary>
+public class GetAdminConfigHandler(IAppDbContext db, IConfiguration configuration)
     : IRequestHandler<GetAdminConfigQuery, AdminConfigDto>
 {
-    /// <inheritdoc/>
-    public Task<AdminConfigDto> Handle(GetAdminConfigQuery request, CancellationToken cancellationToken)
-    {
-        var dto = new AdminConfigDto(
-            GeminiApiKeyConfigured: !string.IsNullOrWhiteSpace(configuration["LlmService:GeminiApiKey"]),
-            LlmModel: configuration["LlmService:Model"] ?? "gemini-1.5-flash",
-            Version: typeof(GetAdminConfigHandler).Assembly.GetName().Version?.ToString() ?? "1.0.0");
+    private const string LlmModelKey = "LlmService:Model";
+    private const string DefaultModel = "gemini-1.5-flash";
 
-        return Task.FromResult(dto);
+    /// <inheritdoc/>
+    public async Task<AdminConfigDto> Handle(GetAdminConfigQuery request, CancellationToken cancellationToken)
+    {
+        var model = await db.AdminSettings
+            .Where(s => s.Key == LlmModelKey)
+            .Select(s => s.Value)
+            .FirstOrDefaultAsync(cancellationToken)
+            ?? configuration[LlmModelKey]
+            ?? DefaultModel;
+
+        return new AdminConfigDto(
+            GeminiApiKeyConfigured: !string.IsNullOrWhiteSpace(configuration["LlmService:GeminiApiKey"]),
+            LlmModel: model,
+            Version: typeof(GetAdminConfigHandler).Assembly.GetName().Version?.ToString() ?? "1.0.0");
     }
 }

@@ -2,5 +2,5 @@ using MediatR;
 
 namespace KitchenAI.Application.Admin;
 
-/// <summary>Updates mutable admin configuration (LLM model selection, etc.).</summary>
+/// <summary>Persists mutable admin configuration to the database (e.g. LLM model selection).</summary>
 public record UpdateAdminConfigCommand(bool? GeminiApiKeyPresent, string? LlmModel) : IRequest<AdminConfigDto>;
