@@ -15,6 +15,7 @@ public interface IAppDbContext
     DbSet<GeneratedRecipe> GeneratedRecipes { get; }
     DbSet<Notification> Notifications { get; }
     DbSet<AnalyticsEvent> AnalyticsEvents { get; }
+    DbSet<AdminSetting> AdminSettings { get; }
 
     /// <summary>Saves all pending changes to the database.</summary>
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
