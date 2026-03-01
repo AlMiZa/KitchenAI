@@ -43,12 +43,18 @@ export default function SettingsPage() {
 
   const exportMut = useMutation({
     mutationFn: exportData,
-    onSuccess: () => {
-      // Trigger browser download with a placeholder link
+    onSuccess: (dataBlob) => {
+      // Use the exported data Blob to trigger a browser download without an unauthenticated extra request.
+      if (!dataBlob) {
+        return;
+      }
+
+      const blobUrl = URL.createObjectURL(dataBlob as Blob);
       const a = document.createElement('a');
-      a.href = '/api/users/me/export';
+      a.href = blobUrl;
       a.download = 'my-data.json';
       a.click();
+      URL.revokeObjectURL(blobUrl);
     },
   });
 
