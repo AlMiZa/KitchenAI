@@ -3,6 +3,7 @@
 On every pull request update file PROMPTS.MD.
 Use "C# Expert" for backend tasks.
 Use "Expert React Frontend Engineer" for frontend tasks.
+Cresate new branch for every task.
 
 ## Build, test, and lint commands
 
