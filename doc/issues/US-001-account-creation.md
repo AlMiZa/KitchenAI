@@ -4,6 +4,10 @@
 **Priority:** Must-have (MVP)  
 **Sprint:** Sprint 0 / Sprint 1
 
+> This story is split into frontend and backend sub-issues:
+> - **Backend**: [US-001-BE — Account creation — Backend](US-001-BE-account-creation.md)
+> - **Frontend**: [US-001-FE — Account creation — Frontend](US-001-FE-account-creation.md)
+
 ## Story
 
 As a user I want to create an account to persist my inventory across devices.

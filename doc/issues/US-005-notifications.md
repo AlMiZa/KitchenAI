@@ -4,6 +4,10 @@
 **Priority:** Must-have (MVP)  
 **Sprint:** Sprint 4
 
+> This story is split into frontend and backend sub-issues:
+> - **Backend**: [US-005-BE — Notifications — Backend](US-005-BE-notifications.md)
+> - **Frontend**: [US-005-FE — Notifications — Frontend](US-005-FE-notifications.md)
+
 ## Story
 
 As a user I want to be notified about items expiring soon.

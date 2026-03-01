@@ -4,6 +4,10 @@
 **Priority:** Must-have (MVP)  
 **Sprint:** Sprint 5
 
+> This story is split into frontend and backend sub-issues:
+> - **Backend**: [US-007-BE — Unit tests & CI — Backend](US-007-BE-unit-tests-ci.md)
+> - **Frontend**: [US-007-FE — Unit tests & CI — Frontend](US-007-FE-unit-tests-ci.md)
+
 ## Story
 
 As a developer I want automated unit tests for backend handlers to ensure correctness.

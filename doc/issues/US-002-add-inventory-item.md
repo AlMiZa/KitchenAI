@@ -4,6 +4,10 @@
 **Priority:** Must-have (MVP)  
 **Sprint:** Sprint 1
 
+> This story is split into frontend and backend sub-issues:
+> - **Backend**: [US-002-BE — Add inventory item — Backend](US-002-BE-add-inventory-item.md)
+> - **Frontend**: [US-002-FE — Add inventory item — Frontend](US-002-FE-add-inventory-item.md)
+
 ## Story
 
 As a user I want to add products with quantity, units and expiry so I can track them.
