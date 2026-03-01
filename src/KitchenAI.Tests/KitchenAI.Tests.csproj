@@ -25,7 +25,6 @@
     <ProjectReference Include="..\KitchenAI.Application\KitchenAI.Application.csproj" />
     <ProjectReference Include="..\KitchenAI.Domain\KitchenAI.Domain.csproj" />
     <ProjectReference Include="..\KitchenAI.Infrastructure\KitchenAI.Infrastructure.csproj" />
-    <ProjectReference Include="..\KitchenAI.Api\KitchenAI.Api.csproj" />
   </ItemGroup>
 
 </Project>
