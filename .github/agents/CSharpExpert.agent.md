@@ -1,4 +1,3 @@
-
 ---
 name: "C# Expert"
 description: An agent designed to assist with software development tasks for .NET projects.
