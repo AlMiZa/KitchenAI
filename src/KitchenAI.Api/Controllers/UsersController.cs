@@ -1,3 +1,4 @@
+using KitchenAI.Application.Auth;
 using KitchenAI.Application.Gdpr;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -25,4 +26,15 @@ public class UsersController : ApiControllerBase
         await Mediator.Send(new DeleteUserCommand(GetCurrentUserId()), ct);
         return NoContent();
     }
+
+    /// <summary>Updates the current user's display name and/or locale.</summary>
+    [HttpPut("me")]
+    public async Task<IActionResult> UpdateProfile([FromBody] UpdateProfileRequest body, CancellationToken ct)
+    {
+        var result = await Mediator.Send(new UpdateProfileCommand(GetCurrentUserId(), body.DisplayName, body.Locale), ct);
+        return Ok(result);
+    }
+
+    /// <summary>Request body for profile updates.</summary>
+    public record UpdateProfileRequest(string? DisplayName, string? Locale);
 }
