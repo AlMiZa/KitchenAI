@@ -1,0 +1,55 @@
+name: Create Issues from Doc Files
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'doc/issues/*.md'
+    branches:
+      - main
+
+permissions:
+  issues: write
+  contents: read
+
+jobs:
+  create-issues:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Create missing issues from doc/issues/*.md
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "Fetching all existing issue titles..."
+          existing_titles=$(gh issue list --state all --limit 500 --json title --jq '.[].title')
+
+          for file in doc/issues/*.md; do
+            filename=$(basename "$file")
+            [ "$filename" = "README.md" ] && continue
+
+            # Extract title from the first H1 heading
+            title=$(grep -m1 "^# " "$file" | sed 's/^# //')
+            if [ -z "$title" ]; then
+              echo "Skipping $file: no H1 heading found"
+              continue
+            fi
+
+            # Derive the issue identifier from the filename (e.g. "TECH-001-BE" from
+            # "TECH-001-BE-project-setup.md") by taking the leading uppercase/digit/hyphen
+            # segment before the first lowercase word. If the filename has no lowercase
+            # segment (e.g. "TECH-001.md"), sed returns it unchanged, which is the
+            # correct identifier.
+            identifier=$(echo "$filename" | sed 's/\.md$//' | sed 's/^\([A-Z0-9-]*\)-[a-z].*/\1/')
+
+            # Check whether any existing issue title begins with this identifier.
+            # Anchoring with "^" and appending a space ensures "TECH-001 " does not
+            # accidentally match "TECH-001-BE — …" titles.
+            if echo "$existing_titles" | grep -q "^${identifier} "; then
+              echo "Skipping (already exists for ${identifier}): $title"
+            else
+              echo "Creating issue: $title"
+              gh issue create --title "$title" --body-file "$file"
+            fi
+          done
