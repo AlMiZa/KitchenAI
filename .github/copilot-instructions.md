@@ -1,5 +1,9 @@
 # Copilot Instructions for KitchenAI
 
+On every pull request update file PROMPTS.MD.
+Use "C# Expert" for backend tasks.
+Use "Expert React Frontend Engineer" for frontend tasks.
+
 ## Build, test, and lint commands
 
 Use these commands from the project specs when scaffolding is present:
