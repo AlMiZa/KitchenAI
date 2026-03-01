@@ -4,6 +4,10 @@
 **Priority:** Must-have (MVP)  
 **Sprint:** Sprint 2
 
+> This story is split into frontend and backend sub-issues:
+> - **Backend**: [US-003-BE — Generate recipe — Backend](US-003-BE-generate-recipe.md)
+> - **Frontend**: [US-003-FE — Generate recipe — Frontend](US-003-FE-generate-recipe.md)
+
 ## Story
 
 As a user I want to get a generated recipe based on my inventory.

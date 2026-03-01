@@ -4,6 +4,10 @@
 **Priority:** Must-have (MVP)  
 **Sprint:** Sprint 0
 
+> This task is split into frontend and backend sub-issues:
+> - **Backend**: [TECH-001-BE — Project setup — Backend](TECH-001-BE-project-setup.md)
+> - **Frontend**: [TECH-001-FE — Project setup — Frontend](TECH-001-FE-project-setup.md)
+
 ## Overview
 
 Scaffold the full project structure for both frontend (React SPA) and backend (ASP.NET Core Web API) with CI pipeline.

@@ -4,6 +4,10 @@
 **Priority:** Must-have (MVP)  
 **Sprint:** Sprint 3
 
+> This story is split into frontend and backend sub-issues:
+> - **Backend**: [US-004-BE — Check recipe availability — Backend](US-004-BE-check-recipe-availability.md)
+> - **Frontend**: [US-004-FE — Check recipe availability — Frontend](US-004-FE-check-recipe-availability.md)
+
 ## Story
 
 As a user I want to check a saved recipe against my inventory to know what's missing.

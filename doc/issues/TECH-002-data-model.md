@@ -1,6 +1,6 @@
 # TECH-002 — Data model & database setup
 
-**Type:** Technical Task  
+**Type:** Technical Task — Backend  
 **Priority:** Must-have (MVP)  
 **Sprint:** Sprint 0 / Sprint 1
 

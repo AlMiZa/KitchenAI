@@ -4,6 +4,10 @@
 **Priority:** Must-have (MVP)  
 **Sprint:** Sprint 4
 
+> This task is split into frontend and backend sub-issues:
+> - **Backend**: [TECH-003-BE — Analytics — Backend](TECH-003-BE-analytics-dashboard.md)
+> - **Frontend**: [TECH-003-FE — Analytics — Frontend](TECH-003-FE-analytics-dashboard.md)
+
 ## Overview
 
 Implement the analytics event tracking and dashboard indicators for the KitchenAI application.

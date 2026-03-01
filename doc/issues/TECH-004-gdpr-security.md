@@ -4,6 +4,10 @@
 **Priority:** Must-have (MVP)  
 **Sprint:** Sprint 5
 
+> This task is split into frontend and backend sub-issues:
+> - **Backend**: [TECH-004-BE — GDPR, privacy & security — Backend](TECH-004-BE-gdpr-security.md)
+> - **Frontend**: [TECH-004-FE — GDPR, privacy & security — Frontend](TECH-004-FE-gdpr-security.md)
+
 ## Overview
 
 Implement GDPR compliance, privacy controls, and security requirements for the KitchenAI application.

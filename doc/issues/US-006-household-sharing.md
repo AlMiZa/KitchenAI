@@ -4,6 +4,10 @@
 **Priority:** Must-have (MVP)  
 **Sprint:** Sprint 1
 
+> This story is split into frontend and backend sub-issues:
+> - **Backend**: [US-006-BE — Household sharing — Backend](US-006-BE-household-sharing.md)
+> - **Frontend**: [US-006-FE — Household sharing — Frontend](US-006-FE-household-sharing.md)
+
 ## Story
 
 As a user I want household data persisted so family members can access the same inventory.

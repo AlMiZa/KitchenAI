@@ -4,6 +4,10 @@
 **Priority:** Must-have (MVP)  
 **Sprint:** Sprint 5
 
+> This task is split into frontend and backend sub-issues:
+> - **Backend**: [TECH-005-BE — Localization — Backend](TECH-005-BE-localization.md)
+> - **Frontend**: [TECH-005-FE — Localization & accessibility — Frontend](TECH-005-FE-localization-accessibility.md)
+
 ## Overview
 
 Implement localization (Polish and English) and accessibility (WCAG AA) requirements.
