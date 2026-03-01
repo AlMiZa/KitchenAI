@@ -10,6 +10,9 @@ const config: Config = {
           jsx: 'react-jsx',
           esModuleInterop: true,
           resolveJsonModule: true,
+          // Include jest-dom types so toBeInTheDocument etc. are recognised
+          // Also include node for util/TextEncoder used in setupTests
+          types: ['jest', '@testing-library/jest-dom', 'node'],
         },
       },
     ],

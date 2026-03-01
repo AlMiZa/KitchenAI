@@ -2,8 +2,12 @@ import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
-import '../i18n/index';
+import i18n from '../i18n/index';
 import RecipeDetailPage from '../pages/RecipeDetail';
+
+// Run tests in English so selectors match
+beforeAll(async () => { await i18n.changeLanguage('en'); });
+afterAll(async  () => { await i18n.changeLanguage('pl'); });
 
 jest.mock('../hooks/useAuth', () => ({
   useAuth: () => ({
@@ -41,12 +45,9 @@ const checkResultWithMissing = {
   ],
 };
 
-// We'll control what checkRecipeAvailability returns via the mock variable
-let checkResponse = checkResultWithMissing;
-
 jest.mock('../services/recipes', () => ({
   getRecipe:                jest.fn(() => Promise.resolve(mockRecipe)),
-  checkRecipeAvailability:  jest.fn(() => Promise.resolve(checkResponse)),
+  checkRecipeAvailability:  jest.fn(() => Promise.resolve(checkResultWithMissing)),
   generateRecipes:          jest.fn(),
   getRecipes:               jest.fn(),
   saveRecipe:               jest.fn(),
@@ -66,9 +67,6 @@ function renderDetail() {
 }
 
 describe('RecipeView', () => {
-  // reset between tests
-  beforeEach(() => { checkResponse = checkResultWithMissing; });
-
   it('"Check against my inventory" button is visible', async () => {
     renderDetail();
     // Wait for recipe to load
@@ -98,3 +96,4 @@ describe('RecipeView', () => {
     });
   });
 });
+

@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
-import '../i18n/index';
+import i18n from '../i18n/index';
 import RegisterPage from '../pages/auth/Register';
 
 // Provide a safe no-op AuthProvider/useAuth for these tests
@@ -16,6 +16,10 @@ jest.mock('../hooks/useAuth', () => ({
   }),
   AuthProvider: ({ children }: { children: React.ReactNode }) => <>{children}</>,
 }));
+
+// Run tests in English so selectors match
+beforeAll(async () => { await i18n.changeLanguage('en'); });
+afterAll(async  () => { await i18n.changeLanguage('pl'); });
 
 function renderRegister() {
   return render(
@@ -56,3 +60,4 @@ describe('Register form validation', () => {
     expect(screen.getByText(/valid email/i)).toBeInTheDocument();
   });
 });
+

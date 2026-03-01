@@ -2,8 +2,12 @@ import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { MemoryRouter } from 'react-router-dom';
-import '../i18n/index';
+import i18n from '../i18n/index';
 import InventoryPage from '../pages/Inventory';
+
+// Run tests in English so selectors match
+beforeAll(async () => { await i18n.changeLanguage('en'); });
+afterAll(async  () => { await i18n.changeLanguage('pl'); });
 
 // Mock auth so householdId is available
 jest.mock('../hooks/useAuth', () => ({
@@ -69,6 +73,7 @@ describe('InventoryList', () => {
     // Open the Add Item modal
     await user.click(screen.getByRole('button', { name: /add item/i }));
 
+    // The quantity input has id "item-quantity" and label "Quantity"
     const qtyInput = screen.getByLabelText(/quantity/i) as HTMLInputElement;
 
     // Type a valid fractional quantity
@@ -81,3 +86,7 @@ describe('InventoryList', () => {
     expect(qtyInput.value).toBe('');
   });
 });
+
+// Suppress act() warnings from React Query's internal timer calls
+afterEach(() => waitFor(() => {}));
+

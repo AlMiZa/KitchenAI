@@ -2,8 +2,12 @@ import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { MemoryRouter } from 'react-router-dom';
-import '../i18n/index';
+import i18n from '../i18n/index';
 import NotificationBell from '../components/NotificationBell';
+
+// Run tests in English so aria-labels match
+beforeAll(async () => { await i18n.changeLanguage('en'); });
+afterAll(async  () => { await i18n.changeLanguage('pl'); });
 
 jest.mock('../hooks/useAuth', () => ({
   useAuth: () => ({
@@ -50,10 +54,10 @@ describe('NotificationBell', () => {
     const user = userEvent.setup();
     renderBell();
 
-    // Wait for bell to be ready
+    // Wait for bell to be ready (badge appears)
     await screen.findByText('2');
 
-    // Click bell button
+    // Click bell button (aria-label="Notifications" in EN)
     await user.click(screen.getByRole('button', { name: /notifications/i }));
 
     // Panel appears with notification messages
@@ -64,3 +68,4 @@ describe('NotificationBell', () => {
     });
   });
 });
+
