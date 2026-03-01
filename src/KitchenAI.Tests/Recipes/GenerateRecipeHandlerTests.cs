@@ -23,6 +23,15 @@ public class GenerateRecipeHandlerTests
         var userId = Guid.NewGuid();
         var now = DateTime.UtcNow;
 
+        db.Users.Add(new User
+        {
+            Id = userId,
+            Email = "test@example.com",
+            PasswordHash = "hash",
+            DisplayName = "Test User",
+            CreatedAt = now,
+            UpdatedAt = now
+        });
         db.Items.AddRange(
             new Item
             {

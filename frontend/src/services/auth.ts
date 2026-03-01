@@ -25,7 +25,8 @@ export const login = (data: { email: string; password: string }) =>
 export const getMe = () => apiFetch<UserProfile>('/auth/me');
 
 export const updateProfile = (data: Partial<Pick<UserProfile, 'displayName' | 'locale'>>) =>
-  apiFetch<UserProfile>('/auth/me', { method: 'PUT', body: JSON.stringify(data) });
+  // Backend profile-update endpoint lives under /users/me, not /auth/me
+  apiFetch<UserProfile>('/users/me', { method: 'PUT', body: JSON.stringify(data) });
 
 export const exportData = () => apiFetch<Blob>('/users/me/export');
 

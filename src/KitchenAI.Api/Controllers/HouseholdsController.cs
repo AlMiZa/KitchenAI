@@ -32,4 +32,12 @@ public class HouseholdsController : ApiControllerBase
         var result = await Mediator.Send(new JoinHouseholdCommand(GetCurrentUserId(), id), ct);
         return Ok(result);
     }
+
+    /// <summary>Returns a single household by ID if the current user is a member.</summary>
+    [HttpGet("{id:guid}")]
+    public async Task<IActionResult> GetHousehold(Guid id, CancellationToken ct)
+    {
+        var result = await Mediator.Send(new GetHouseholdQuery(GetCurrentUserId(), id), ct);
+        return result is null ? NotFound() : Ok(result);
+    }
 }

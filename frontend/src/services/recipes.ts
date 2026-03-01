@@ -49,8 +49,48 @@ export const saveRecipe = (householdId: string, recipe: Recipe) =>
     body: JSON.stringify(recipe),
   });
 
-export const checkRecipeAvailability = (householdId: string, recipeId: string) =>
-  apiFetch<IngredientCheckResult>(
+// ── Backend availability types ────────────────────────────────────────────────
+// Backend AvailabilityResultDto shape returned by POST …/check
+interface BackendAvailabilityItem {
+  name: string;
+  required: number;
+  available: number;
+  deficit: number;
+}
+
+interface BackendAvailabilityResult {
+  status: string; // 'ready' | 'missing'
+  items: BackendAvailabilityItem[];
+}
+
+export const checkRecipeAvailability = async (
+  householdId: string,
+  recipeId: string,
+): Promise<IngredientCheckResult> => {
+  const dto = await apiFetch<BackendAvailabilityResult>(
     `/households/${householdId}/recipes/${recipeId}/check`,
     { method: 'POST' },
   );
+
+  // Map each backend item to a RecipeIngredient with a derived status:
+  //   deficit === 0              → 'available'
+  //   deficit > 0 && available > 0 → 'partial'
+  //   available === 0            → 'missing'
+  const ingredients: RecipeIngredient[] = (dto.items ?? []).map((item) => ({
+    name: item.name,
+    quantity: item.required,
+    unit: '', // backend availability check does not return units; populated from recipe data if needed
+    status:
+      item.deficit === 0
+        ? 'available'
+        : item.available > 0
+          ? 'partial'
+          : 'missing',
+  }));
+
+  return {
+    ingredients,
+    allAvailable: dto.status === 'ready',
+    missingCount: ingredients.filter((i) => i.status !== 'available').length,
+  };
+};

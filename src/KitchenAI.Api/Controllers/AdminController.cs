@@ -24,4 +24,12 @@ public class AdminController : ApiControllerBase
         var result = await Mediator.Send(command, ct);
         return Ok(result);
     }
+
+    /// <summary>Returns site-wide admin metrics.</summary>
+    [HttpGet("metrics")]
+    public async Task<IActionResult> GetMetrics(CancellationToken ct)
+    {
+        var result = await Mediator.Send(new GetAdminMetricsQuery(), ct);
+        return Ok(result);
+    }
 }
