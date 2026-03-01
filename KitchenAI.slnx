@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/KitchenAI.Api/KitchenAI.Api.csproj" />
+    <Project Path="src/KitchenAI.Application/KitchenAI.Application.csproj" />
+    <Project Path="src/KitchenAI.Domain/KitchenAI.Domain.csproj" />
+    <Project Path="src/KitchenAI.Infrastructure/KitchenAI.Infrastructure.csproj" />
+    <Project Path="src/KitchenAI.Tests/KitchenAI.Tests.csproj" />
+  </Folder>
+</Solution>
