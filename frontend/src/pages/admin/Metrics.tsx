@@ -14,7 +14,7 @@ export default function MetricsPage() {
 
   const { data: metrics, isLoading } = useQuery({
     queryKey: ['admin-metrics'],
-    queryFn: () => apiFetch<MetricsSummary>('/admin/metrics'),
+    queryFn: () => apiFetch<MetricsSummary>('/admin/config'),
   });
 
   const cards = metrics
