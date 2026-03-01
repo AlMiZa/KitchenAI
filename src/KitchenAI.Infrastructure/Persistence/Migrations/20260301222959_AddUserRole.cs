@@ -15,7 +15,7 @@ namespace KitchenAI.Infrastructure.Persistence.Migrations
                 table: "Users",
                 type: "TEXT",
                 nullable: false,
-                defaultValue: "");
+                defaultValue: "user");
         }
 
         /// <inheritdoc />
