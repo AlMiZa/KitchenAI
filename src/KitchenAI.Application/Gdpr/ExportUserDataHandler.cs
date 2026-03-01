@@ -41,8 +41,14 @@ public class ExportUserDataHandler(IAppDbContext db) : IRequestHandler<ExportUse
             households = households.Select(h => new { h.Id, h.Name, h.CreatedAt }),
             items = items.Select(i => new
             {
-                i.Id, i.HouseholdId, i.Name, i.Quantity, i.Unit,
-                i.ExpiryDate, i.Price, i.IsArchived
+                i.Id,
+                i.HouseholdId,
+                i.Name,
+                i.Quantity,
+                i.Unit,
+                i.ExpiryDate,
+                i.Price,
+                i.IsArchived
             }),
             recipes = recipes.Select(r => new { r.Id, r.HouseholdId, r.Title, r.CreatedAt })
         };
