@@ -86,14 +86,8 @@ using (var scope = app.Services.CreateScope())
 }
 
 // ── Middleware pipeline ──────────────────────────────────────────────────────
-app.UseSwagger();
-app.UseSwaggerUI(c =>
-{
-    c.SwaggerEndpoint("/swagger/v1/swagger.json", "KitchenAI API v1");
-    c.RoutePrefix = "swagger";
-});
 
-// ── Global exception handler ─────────────────────────────────────────────────
+// ── Global exception handler (must be first to catch all downstream exceptions)
 app.UseExceptionHandler(errorApp =>
 {
     errorApp.Run(async context =>
@@ -112,6 +106,13 @@ app.UseExceptionHandler(errorApp =>
 
         await context.Response.WriteAsJsonAsync(new { error = ex?.Message ?? "An unexpected error occurred." });
     });
+});
+
+app.UseSwagger();
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "KitchenAI API v1");
+    c.RoutePrefix = "swagger";
 });
 
 app.UseHttpsRedirection();
