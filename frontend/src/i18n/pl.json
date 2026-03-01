@@ -21,6 +21,151 @@
   "common": {
     "loading": "Ładowanie...",
     "error": "Wystąpił błąd",
-    "kitchenAI": "KitchenAI"
+    "kitchenAI": "KitchenAI",
+    "save": "Zapisz",
+    "cancel": "Anuluj",
+    "delete": "Usuń",
+    "edit": "Edytuj",
+    "add": "Dodaj",
+    "close": "Zamknij",
+    "confirm": "Potwierdź",
+    "yes": "Tak",
+    "no": "Nie"
+  },
+  "auth": {
+    "login": "Zaloguj się",
+    "register": "Zarejestruj się",
+    "email": "Email",
+    "password": "Hasło",
+    "displayName": "Nazwa wyświetlana",
+    "required": "To pole jest wymagane",
+    "invalidEmail": "Podaj prawidłowy adres email",
+    "passwordTooShort": "Hasło musi mieć co najmniej 8 znaków",
+    "invalidCredentials": "Nieprawidłowy email lub hasło",
+    "registerError": "Rejestracja nie powiodła się. Spróbuj ponownie.",
+    "alreadyHaveAccount": "Masz już konto? Zaloguj się",
+    "dontHaveAccount": "Nie masz konta? Zarejestruj się"
+  },
+  "dashboard": {
+    "expiringSoon": "Wkrótce wygasają",
+    "moneySaved": "Zaoszczędzone",
+    "recipesGenerated": "Wygenerowane przepisy",
+    "topIngredients": "Najczęstsze składniki",
+    "generateRecipes": "Generuj przepisy z lodówki",
+    "expiringItems": "Produkty wkrótce wygasające",
+    "noExpiringItems": "Brak produktów wygasających 🎉"
+  },
+  "inventory": {
+    "addItem": "Dodaj produkt",
+    "addNewItem": "Nowy produkt",
+    "editItem": "Edytuj produkt",
+    "filterByLocation": "Filtruj wg miejsca",
+    "allLocations": "Wszystkie miejsca",
+    "expiringSoon": "Tylko wkrótce wygasające",
+    "name": "Nazwa",
+    "quantity": "Ilość",
+    "unit": "Jednostka",
+    "expiryDate": "Data ważności",
+    "purchaseDate": "Data zakupu",
+    "location": "Miejsce przechowywania",
+    "brand": "Marka",
+    "price": "Cena",
+    "notes": "Notatki",
+    "bestBy": "Najlepsza do",
+    "useBy": "Należy spożyć do",
+    "noItems": "Brak produktów w spiżarni",
+    "expiresToday": "Dziś",
+    "invalidQty": "Ilość musi być liczbą dodatnią",
+    "locations": {
+      "fridge": "Lodówka",
+      "freezer": "Zamrażarka",
+      "pantry": "Spiżarnia",
+      "cabinet": "Szafka"
+    },
+    "units": {
+      "g": "g",
+      "kg": "kg",
+      "ml": "ml",
+      "L": "L",
+      "pcs": "szt"
+    }
+  },
+  "recipes": {
+    "generateFromFridge": "Generuj przepisy z lodówki",
+    "generating": "Generuję...",
+    "saveRecipe": "Zapisz przepis",
+    "viewRecipe": "Zobacz przepis",
+    "prepTime": "przygotowanie",
+    "cookTime": "gotowanie",
+    "servings": "porcje",
+    "nutrition": "Wartości odżywcze",
+    "rationale": "Dlaczego ten przepis?",
+    "noRecipes": "Brak przepisów. Kliknij generuj, aby zacząć!",
+    "calories": "Kalorie",
+    "protein": "Białko",
+    "carbs": "Węglowodany",
+    "fat": "Tłuszcze",
+    "ingredients": "Składniki",
+    "steps": "Kroki",
+    "checkInventory": "Sprawdź w spiżarni",
+    "readyToCook": "Gotowe do gotowania! 🍳",
+    "addMissingToList": "Dodaj brakujące do listy zakupów",
+    "available": "Dostępne",
+    "partial": "Częściowo dostępne",
+    "missing": "Brakujące"
+  },
+  "shoppingList": {
+    "addItem": "Dodaj produkt",
+    "clearCompleted": "Usuń ukończone",
+    "noItems": "Lista zakupów jest pusta",
+    "itemName": "Nazwa produktu…",
+    "markAcquired": "Oznacz jako kupione"
+  },
+  "settings": {
+    "profile": "Profil",
+    "notifications": "Powiadomienia",
+    "household": "Gospodarstwo",
+    "privacy": "Prywatność",
+    "displayName": "Nazwa wyświetlana",
+    "email": "Email",
+    "locale": "Język",
+    "saveProfile": "Zapisz profil",
+    "expiryThreshold": "Alert ważności (dni)",
+    "emailNotifications": "Powiadomienia email",
+    "pushNotifications": "Powiadomienia push",
+    "saveNotifications": "Zapisz powiadomienia",
+    "householdName": "Gospodarstwo",
+    "memberCount": "Członkowie",
+    "inviteMember": "Zaproś członka (wkrótce)",
+    "exportData": "Eksportuj moje dane",
+    "deleteAccount": "Usuń konto",
+    "deleteConfirm": "Czy na pewno? Tej operacji nie można cofnąć.",
+    "profileSaved": "Profil zapisany pomyślnie",
+    "notificationsSaved": "Ustawienia powiadomień zapisane"
+  },
+  "notifications": {
+    "title": "Powiadomienia",
+    "markAllRead": "Oznacz wszystkie jako przeczytane",
+    "noNotifications": "Brak powiadomień",
+    "unread": "nieprzeczytane"
+  },
+  "admin": {
+    "apiKeys": {
+      "configStatus": "Status konfiguracji",
+      "updateConfig": "Aktualizuj konfigurację",
+      "keyValue": "Wartość",
+      "masked": "••••••••"
+    },
+    "metrics": {
+      "summary": "Podsumowanie analityk",
+      "totalUsers": "Użytkownicy",
+      "totalHouseholds": "Gospodarstwa",
+      "totalRecipes": "Wygenerowane przepisy",
+      "totalItems": "Śledzone produkty"
+    }
+  },
+  "cookie": {
+    "message": "Używamy ciasteczek, aby poprawić Twoje doświadczenia. Korzystając z KitchenAI, zgadzasz się z naszą polityką cookies.",
+    "accept": "Akceptuj wszystkie"
   }
 }
