@@ -1,5 +1,8 @@
 import { Outlet, NavLink } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import NotificationBell from '../components/NotificationBell';
+import LanguageSwitcher from '../components/LanguageSwitcher';
+import CookieBanner from '../components/CookieBanner';
 
 /** Primary application layout with header navigation and footer. */
 export default function MainLayout() {
@@ -18,7 +21,8 @@ export default function MainLayout() {
       <header className="bg-white shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
           <span className="text-xl font-bold text-green-600">{t('common.kitchenAI')}</span>
-          <nav className="flex gap-4" aria-label="Main navigation">
+
+          <nav className="flex gap-1" aria-label="Main navigation">
             {navLinks.map(({ to, label, end }) => (
               <NavLink
                 key={to}
@@ -36,6 +40,12 @@ export default function MainLayout() {
               </NavLink>
             ))}
           </nav>
+
+          {/* Right-side actions */}
+          <div className="flex items-center gap-2">
+            <LanguageSwitcher />
+            <NotificationBell />
+          </div>
         </div>
       </header>
 
@@ -46,6 +56,8 @@ export default function MainLayout() {
       <footer className="bg-white border-t border-gray-200 py-4 text-center text-sm text-gray-500">
         &copy; {new Date().getFullYear()} {t('common.kitchenAI')}
       </footer>
+
+      <CookieBanner />
     </div>
   );
 }

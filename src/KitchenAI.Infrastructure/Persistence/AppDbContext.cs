@@ -1,10 +1,11 @@
+using KitchenAI.Application.Persistence;
 using KitchenAI.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace KitchenAI.Infrastructure.Persistence;
 
 /// <summary>Primary EF Core database context for KitchenAI.</summary>
-public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options)
+public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options), IAppDbContext
 {
     public DbSet<User> Users => Set<User>();
     public DbSet<Household> Households => Set<Household>();

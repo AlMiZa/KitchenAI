@@ -21,6 +21,151 @@
   "common": {
     "loading": "Loading...",
     "error": "An error occurred",
-    "kitchenAI": "KitchenAI"
+    "kitchenAI": "KitchenAI",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "add": "Add",
+    "close": "Close",
+    "confirm": "Confirm",
+    "yes": "Yes",
+    "no": "No"
+  },
+  "auth": {
+    "login": "Sign In",
+    "register": "Sign Up",
+    "email": "Email",
+    "password": "Password",
+    "displayName": "Display Name",
+    "required": "This field is required",
+    "invalidEmail": "Please enter a valid email address",
+    "passwordTooShort": "Password must be at least 8 characters",
+    "invalidCredentials": "Invalid email or password",
+    "registerError": "Registration failed. Please try again.",
+    "alreadyHaveAccount": "Already have an account? Sign In",
+    "dontHaveAccount": "Don't have an account? Sign Up"
+  },
+  "dashboard": {
+    "expiringSoon": "Expiring Soon",
+    "moneySaved": "Money Saved",
+    "recipesGenerated": "Recipes Generated",
+    "topIngredients": "Top Ingredients",
+    "generateRecipes": "Generate Recipes from My Fridge",
+    "expiringItems": "Items Expiring Soon",
+    "noExpiringItems": "No items expiring soon 🎉"
+  },
+  "inventory": {
+    "addItem": "Add Item",
+    "addNewItem": "Add New Item",
+    "editItem": "Edit Item",
+    "filterByLocation": "Filter by location",
+    "allLocations": "All Locations",
+    "expiringSoon": "Expiring soon only",
+    "name": "Name",
+    "quantity": "Quantity",
+    "unit": "Unit",
+    "expiryDate": "Expiry Date",
+    "purchaseDate": "Purchase Date",
+    "location": "Storage Location",
+    "brand": "Brand",
+    "price": "Price",
+    "notes": "Notes",
+    "bestBy": "Best by",
+    "useBy": "Use by",
+    "noItems": "No items in inventory",
+    "expiresToday": "Today",
+    "invalidQty": "Quantity must be a positive number",
+    "locations": {
+      "fridge": "Fridge",
+      "freezer": "Freezer",
+      "pantry": "Pantry",
+      "cabinet": "Cabinet"
+    },
+    "units": {
+      "g": "g",
+      "kg": "kg",
+      "ml": "ml",
+      "L": "L",
+      "pcs": "pcs"
+    }
+  },
+  "recipes": {
+    "generateFromFridge": "Generate Recipes from My Fridge",
+    "generating": "Generating...",
+    "saveRecipe": "Save Recipe",
+    "viewRecipe": "View Recipe",
+    "prepTime": "prep",
+    "cookTime": "cook",
+    "servings": "servings",
+    "nutrition": "Nutrition",
+    "rationale": "Why this recipe?",
+    "noRecipes": "No recipes yet. Click generate to get started!",
+    "calories": "Calories",
+    "protein": "Protein",
+    "carbs": "Carbs",
+    "fat": "Fat",
+    "ingredients": "Ingredients",
+    "steps": "Steps",
+    "checkInventory": "Check Against My Inventory",
+    "readyToCook": "Ready to cook! 🍳",
+    "addMissingToList": "Add Missing to Shopping List",
+    "available": "Available",
+    "partial": "Partially available",
+    "missing": "Missing"
+  },
+  "shoppingList": {
+    "addItem": "Add Item",
+    "clearCompleted": "Clear completed",
+    "noItems": "Your shopping list is empty",
+    "itemName": "Item name…",
+    "markAcquired": "Mark as acquired"
+  },
+  "settings": {
+    "profile": "Profile",
+    "notifications": "Notifications",
+    "household": "Household",
+    "privacy": "Privacy",
+    "displayName": "Display Name",
+    "email": "Email",
+    "locale": "Language",
+    "saveProfile": "Save Profile",
+    "expiryThreshold": "Expiry Alert (days)",
+    "emailNotifications": "Email Notifications",
+    "pushNotifications": "Push Notifications",
+    "saveNotifications": "Save Notifications",
+    "householdName": "Household",
+    "memberCount": "Members",
+    "inviteMember": "Invite Member (coming soon)",
+    "exportData": "Export My Data",
+    "deleteAccount": "Delete My Account",
+    "deleteConfirm": "Are you sure? This action cannot be undone.",
+    "profileSaved": "Profile saved successfully",
+    "notificationsSaved": "Notification settings saved"
+  },
+  "notifications": {
+    "title": "Notifications",
+    "markAllRead": "Mark all as read",
+    "noNotifications": "No notifications",
+    "unread": "unread"
+  },
+  "admin": {
+    "apiKeys": {
+      "configStatus": "Configuration Status",
+      "updateConfig": "Update Configuration",
+      "keyValue": "Value",
+      "masked": "••••••••"
+    },
+    "metrics": {
+      "summary": "Analytics Summary",
+      "totalUsers": "Total Users",
+      "totalHouseholds": "Total Households",
+      "totalRecipes": "Recipes Generated",
+      "totalItems": "Items Tracked"
+    }
+  },
+  "cookie": {
+    "message": "We use cookies to improve your experience. By using KitchenAI you agree to our cookie policy.",
+    "accept": "Accept All"
   }
 }

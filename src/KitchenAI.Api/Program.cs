@@ -1,8 +1,10 @@
 using System.Text;
 using KitchenAI.Application;
+using KitchenAI.Application.Exceptions;
 using KitchenAI.Infrastructure;
 using KitchenAI.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -89,6 +91,27 @@ app.UseSwaggerUI(c =>
 {
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "KitchenAI API v1");
     c.RoutePrefix = "swagger";
+});
+
+// ── Global exception handler ─────────────────────────────────────────────────
+app.UseExceptionHandler(errorApp =>
+{
+    errorApp.Run(async context =>
+    {
+        var exceptionFeature = context.Features.Get<IExceptionHandlerPathFeature>();
+        var ex = exceptionFeature?.Error;
+
+        context.Response.ContentType = "application/json";
+        context.Response.StatusCode = ex switch
+        {
+            ValidationException => StatusCodes.Status400BadRequest,
+            UnauthorizedAccessException => StatusCodes.Status401Unauthorized,
+            KeyNotFoundException => StatusCodes.Status404NotFound,
+            _ => StatusCodes.Status500InternalServerError
+        };
+
+        await context.Response.WriteAsJsonAsync(new { error = ex?.Message ?? "An unexpected error occurred." });
+    });
 });
 
 app.UseHttpsRedirection();
