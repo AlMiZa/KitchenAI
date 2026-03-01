@@ -1,0 +1,26 @@
+{
+  "nav": {
+    "dashboard": "Dashboard",
+    "inventory": "Inventory",
+    "recipes": "Recipes",
+    "shoppingList": "Shopping List",
+    "settings": "Settings",
+    "admin": "Admin"
+  },
+  "pages": {
+    "dashboard": "Dashboard",
+    "inventory": "Inventory",
+    "recipes": "Recipes",
+    "shoppingList": "Shopping List",
+    "settings": "Settings",
+    "admin": {
+      "apiKeys": "API Keys",
+      "metrics": "Metrics"
+    }
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "kitchenAI": "KitchenAI"
+  }
+}

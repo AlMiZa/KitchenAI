@@ -1,0 +1,26 @@
+{
+  "nav": {
+    "dashboard": "Pulpit",
+    "inventory": "Zapasy",
+    "recipes": "Przepisy",
+    "shoppingList": "Lista zakupów",
+    "settings": "Ustawienia",
+    "admin": "Admin"
+  },
+  "pages": {
+    "dashboard": "Pulpit",
+    "inventory": "Zapasy",
+    "recipes": "Przepisy",
+    "shoppingList": "Lista zakupów",
+    "settings": "Ustawienia",
+    "admin": {
+      "apiKeys": "Klucze API",
+      "metrics": "Metryki"
+    }
+  },
+  "common": {
+    "loading": "Ładowanie...",
+    "error": "Wystąpił błąd",
+    "kitchenAI": "KitchenAI"
+  }
+}

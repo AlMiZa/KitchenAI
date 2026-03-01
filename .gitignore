@@ -52,3 +52,8 @@ CodeCoverage/
 *.VisualState.xml
 TestResult.xml
 nunit-*.xml
+# Frontend — Node.js / Vite
+node_modules/
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
