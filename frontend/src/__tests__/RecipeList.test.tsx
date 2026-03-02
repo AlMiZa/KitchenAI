@@ -1,8 +1,14 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { MemoryRouter } from 'react-router-dom';
-import '../i18n/index';
+import i18n from '../i18n/index';
 import RecipesPage from '../pages/Recipes';
+import * as recipesService from '../services/recipes';
+
+// Run tests in English so selectors match
+beforeAll(async () => { await i18n.changeLanguage('en'); });
+afterAll(async  () => { await i18n.changeLanguage('pl'); });
 
 jest.mock('../hooks/useAuth', () => ({
   useAuth: () => ({
@@ -43,13 +49,13 @@ const mockRecipes = [
 ];
 
 jest.mock('../services/recipes', () => ({
-  getRecipes:       jest.fn(() => Promise.resolve(mockRecipes)),
+  getRecipes:       jest.fn(() => Promise.resolve([])),
   generateRecipes:  jest.fn(() => Promise.resolve([])),
-  saveRecipe:       jest.fn(() => Promise.resolve(mockRecipes[0])),
+  saveRecipe:       jest.fn(() => Promise.resolve(null)),
 }));
 
 function renderRecipes() {
-  const qc = new QueryClient({ defaultOptions: { queries: { retry: false } } });
+  const qc = new QueryClient({ defaultOptions: { queries: { retry: false }, mutations: { retry: false } } });
   return render(
     <QueryClientProvider client={qc}>
       <MemoryRouter>
@@ -60,6 +66,12 @@ function renderRecipes() {
 }
 
 describe('RecipeList', () => {
+  beforeEach(() => {
+    jest.mocked(recipesService.getRecipes).mockResolvedValue(mockRecipes);
+    jest.mocked(recipesService.generateRecipes).mockResolvedValue([]);
+    jest.mocked(recipesService.saveRecipe).mockResolvedValue(mockRecipes[0]);
+  });
+
   it('renders ≥ 2 recipe cards each with title, nutrition summary, and rationale', async () => {
     renderRecipes();
 
@@ -77,6 +89,63 @@ describe('RecipeList', () => {
     ).toBeInTheDocument();
     expect(
       screen.getByText(/leftover rice/i),
+    ).toBeInTheDocument();
+  });
+
+  it('"Generate recipes" button is rendered and clickable', async () => {
+    renderRecipes();
+
+    const btn = await screen.findByRole('button', { name: /generate recipes from my fridge/i });
+    expect(btn).toBeInTheDocument();
+    expect(btn).not.toBeDisabled();
+  });
+
+  it('shows a loading spinner while the generate mutation is pending', async () => {
+    jest.mocked(recipesService.generateRecipes).mockImplementation(
+      () => new Promise(() => { /* never resolves */ }),
+    );
+
+    const user = userEvent.setup();
+    renderRecipes();
+
+    const btn = await screen.findByRole('button', { name: /generate recipes from my fridge/i });
+    await user.click(btn);
+
+    await waitFor(() => {
+      expect(document.querySelector('svg.animate-spin')).toBeInTheDocument();
+    });
+
+    expect(btn).toBeDisabled();
+  });
+
+  it('shows an error message with a retry button when generation fails', async () => {
+    jest.mocked(recipesService.generateRecipes).mockRejectedValue(new Error('Network error'));
+
+    const user = userEvent.setup();
+    renderRecipes();
+
+    const btn = await screen.findByRole('button', { name: /generate recipes from my fridge/i });
+    await user.click(btn);
+
+    await waitFor(() => {
+      expect(
+        screen.getByText(/failed to generate recipes/i),
+      ).toBeInTheDocument();
+    });
+
+    expect(screen.getByRole('button', { name: /retry/i })).toBeInTheDocument();
+  });
+
+  it('rationale section is present in the DOM for each recipe (collapsible via <details>)', async () => {
+    renderRecipes();
+
+    await screen.findByText('Pasta Carbonara');
+
+    const summaries = screen.getAllByText(/why this recipe\?/i);
+    expect(summaries.length).toBeGreaterThanOrEqual(2);
+
+    expect(
+      screen.getByText(/uses your eggs and cheese/i),
     ).toBeInTheDocument();
   });
 });
