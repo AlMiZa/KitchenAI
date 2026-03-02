@@ -3,11 +3,13 @@ import { useTranslation } from 'react-i18next';
 import NotificationBell from '../components/NotificationBell';
 import LanguageSwitcher from '../components/LanguageSwitcher';
 import CookieBanner from '../components/CookieBanner';
+import { useAuth } from '../hooks/useAuth';
 
 /** Primary application layout with header navigation and footer. */
 export default function MainLayout() {
   const { t } = useTranslation();
   const location = useLocation();
+  const { user } = useAuth();
 
   const navLinks = [
     { to: '/', label: t('nav.dashboard'), end: true },
@@ -46,6 +48,20 @@ export default function MainLayout() {
                 {label}
               </NavLink>
             ))}
+            {user?.role === 'admin' && (
+              <NavLink
+                to="/admin"
+                className={({ isActive }) =>
+                  `text-sm font-medium px-3 py-2 rounded-md transition-colors ${
+                    isActive
+                      ? 'bg-yellow-100 text-yellow-700'
+                      : 'text-gray-600 hover:text-yellow-600 hover:bg-gray-100'
+                  }`
+                }
+              >
+                {t('nav.admin')}
+              </NavLink>
+            )}
           </nav>
 
           {/* Right-side actions */}

@@ -26,6 +26,9 @@ export default function SettingsPage() {
 
   // --- Privacy state ---
   const [deleteConfirm, setDeleteConfirm] = useState(false);
+  const [analyticsConsent, setAnalyticsConsent] = useState<boolean>(
+    () => localStorage.getItem('analyticsConsent') === 'accepted',
+  );
 
   // --- Household state ---
   const [showInvite, setShowInvite] = useState(false);
@@ -354,6 +357,24 @@ export default function SettingsPage() {
         {/* Privacy tab */}
         {activeTab === 'privacy' && (
           <section role="tabpanel" id="panel-privacy" aria-labelledby="tab-privacy" className="space-y-6">
+            {/* Analytics consent */}
+            <div>
+              <h3 className="text-sm font-medium text-gray-700 mb-2">{t('settings.analyticsConsent')}</h3>
+              <label className="flex items-start gap-3 text-sm text-gray-700 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={analyticsConsent}
+                  onChange={(e) => {
+                    const accepted = e.target.checked;
+                    localStorage.setItem('analyticsConsent', accepted ? 'accepted' : 'declined');
+                    setAnalyticsConsent(accepted);
+                  }}
+                  className="w-4 h-4 rounded text-green-600 mt-0.5"
+                />
+                <span>{t('settings.analyticsConsentNote')}</span>
+              </label>
+            </div>
+
             <div>
               <h3 className="text-sm font-medium text-gray-700 mb-2">{t('settings.exportData')}</h3>
               <button
@@ -363,6 +384,11 @@ export default function SettingsPage() {
               >
                 {t('settings.exportData')}
               </button>
+            </div>
+
+            {/* Data retention policy */}
+            <div className="rounded-lg bg-gray-50 border border-gray-200 px-4 py-3">
+              <p className="text-xs text-gray-500">{t('settings.dataRetentionPolicy')}</p>
             </div>
 
             <div className="border-t border-gray-200 pt-6">
@@ -375,8 +401,13 @@ export default function SettingsPage() {
                   {t('settings.deleteAccount')}
                 </button>
               ) : (
-                <div className="space-y-3 bg-red-50 rounded-xl p-4">
-                  <p className="text-sm text-red-700">{t('settings.deleteConfirm')}</p>
+                <div
+                  role="dialog"
+                  aria-modal="true"
+                  aria-labelledby="delete-account-heading"
+                  className="space-y-3 bg-red-50 rounded-xl p-4"
+                >
+                  <p id="delete-account-heading" className="text-sm text-red-700">{t('settings.deleteConfirm')}</p>
                   <div className="flex gap-3">
                     <button
                       onClick={() => deleteMut.mutate()}

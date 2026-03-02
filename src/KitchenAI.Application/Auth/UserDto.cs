@@ -6,4 +6,5 @@ public record UserDto(
     string Email,
     string DisplayName,
     string Locale,
-    Guid? HouseholdId);
+    Guid? HouseholdId,
+    string Role = "user");
