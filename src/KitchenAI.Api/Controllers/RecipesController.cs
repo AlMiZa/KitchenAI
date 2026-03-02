@@ -57,4 +57,13 @@ public class RecipesController : ApiControllerBase
         var result = await Mediator.Send(new CheckRecipeAvailabilityQuery(hid, rid), ct);
         return Ok(result);
     }
+
+    /// <summary>Records that the household cooked a recipe.</summary>
+    [HttpPost("{rid:guid}/cook")]
+    public async Task<IActionResult> CookRecipe(Guid hid, Guid rid, CancellationToken ct)
+    {
+        ValidateHouseholdAccess(hid);
+        await Mediator.Send(new CookRecipeCommand(hid, rid), ct);
+        return NoContent();
+    }
 }
