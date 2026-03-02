@@ -44,7 +44,13 @@
     "invalidCredentials": "Invalid email or password",
     "registerError": "Registration failed. Please try again.",
     "alreadyHaveAccount": "Already have an account? Sign In",
-    "dontHaveAccount": "Don't have an account? Sign Up"
+    "dontHaveAccount": "Don't have an account? Sign Up",
+    "or": "or",
+    "sendMagicLink": "Send me a magic link",
+    "checkYourEmail": "Check your email",
+    "magicLinkSent": "We sent a magic link to {{email}}. Click the link in the email to sign in.",
+    "magicLinkError": "Could not send magic link. Please try again.",
+    "backToLogin": "Back to Sign In"
   },
   "dashboard": {
     "expiringSoon": "Expiring Soon",

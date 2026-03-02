@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../hooks/useAuth';
+import { sendMagicLink } from '../../services/auth';
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
@@ -20,6 +21,8 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [errors, setErrors]     = useState<FormErrors>({});
   const [loading, setLoading]   = useState(false);
+  const [magicLinkSent, setMagicLinkSent] = useState(false);
+  const [magicLinkLoading, setMagicLinkLoading] = useState(false);
 
   const validate = (): boolean => {
     const errs: FormErrors = {};
@@ -37,13 +40,52 @@ export default function LoginPage() {
     setLoading(true);
     try {
       await login({ email, password });
-      navigate('/');
+      navigate('/dashboard');
     } catch {
       setErrors({ general: t('auth.invalidCredentials') });
     } finally {
       setLoading(false);
     }
   };
+
+  const handleMagicLink = async () => {
+    if (!email.trim()) {
+      setErrors((p) => ({ ...p, email: t('auth.required') }));
+      return;
+    }
+    if (!EMAIL_REGEX.test(email)) {
+      setErrors((p) => ({ ...p, email: t('auth.invalidEmail') }));
+      return;
+    }
+    setMagicLinkLoading(true);
+    try {
+      await sendMagicLink(email);
+      setMagicLinkSent(true);
+    } catch {
+      setErrors((p) => ({ ...p, general: t('auth.magicLinkError') }));
+    } finally {
+      setMagicLinkLoading(false);
+    }
+  };
+
+  if (magicLinkSent) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
+        <div className="w-full max-w-sm bg-white rounded-2xl shadow-md p-8 space-y-6 text-center">
+          <h1 className="text-2xl font-bold text-green-600">KitchenAI</h1>
+          <div className="text-5xl">📬</div>
+          <h2 className="text-lg font-semibold text-gray-800">{t('auth.checkYourEmail')}</h2>
+          <p className="text-sm text-gray-500">{t('auth.magicLinkSent', { email })}</p>
+          <button
+            onClick={() => setMagicLinkSent(false)}
+            className="text-green-600 hover:underline text-sm"
+          >
+            {t('auth.backToLogin')}
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
@@ -112,6 +154,21 @@ export default function LoginPage() {
             {loading ? t('common.loading') : t('auth.login')}
           </button>
         </form>
+
+        <div className="relative flex items-center">
+          <div className="flex-grow border-t border-gray-200" />
+          <span className="mx-3 text-xs text-gray-400">{t('auth.or')}</span>
+          <div className="flex-grow border-t border-gray-200" />
+        </div>
+
+        <button
+          type="button"
+          disabled={magicLinkLoading}
+          onClick={handleMagicLink}
+          className="w-full border border-gray-300 hover:border-green-500 disabled:opacity-50 text-gray-700 py-2.5 rounded-lg font-medium text-sm transition-colors"
+        >
+          {magicLinkLoading ? t('common.loading') : t('auth.sendMagicLink')}
+        </button>
 
         <p className="text-center text-sm text-gray-500">
           <Link to="/register" className="text-green-600 hover:underline">

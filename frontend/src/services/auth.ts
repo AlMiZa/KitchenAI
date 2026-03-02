@@ -31,3 +31,6 @@ export const updateProfile = (data: Partial<Pick<UserProfile, 'displayName' | 'l
 export const exportData = () => apiFetch<Blob>('/users/me/export');
 
 export const deleteAccount = () => apiFetch<void>('/users/me', { method: 'DELETE' });
+
+export const sendMagicLink = (email: string) =>
+  apiFetch<void>('/auth/magic-link', { method: 'POST', body: JSON.stringify({ email }) });

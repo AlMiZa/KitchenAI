@@ -44,7 +44,13 @@
     "invalidCredentials": "Nieprawidłowy email lub hasło",
     "registerError": "Rejestracja nie powiodła się. Spróbuj ponownie.",
     "alreadyHaveAccount": "Masz już konto? Zaloguj się",
-    "dontHaveAccount": "Nie masz konta? Zarejestruj się"
+    "dontHaveAccount": "Nie masz konta? Zarejestruj się",
+    "or": "lub",
+    "sendMagicLink": "Wyślij mi magic link",
+    "checkYourEmail": "Sprawdź swoją skrzynkę",
+    "magicLinkSent": "Wysłaliśmy magic link na adres {{email}}. Kliknij link w emailu, aby się zalogować.",
+    "magicLinkError": "Nie udało się wysłać magic linku. Spróbuj ponownie.",
+    "backToLogin": "Wróć do logowania"
   },
   "dashboard": {
     "expiringSoon": "Wkrótce wygasają",
