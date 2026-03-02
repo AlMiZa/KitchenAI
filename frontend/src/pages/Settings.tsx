@@ -8,7 +8,7 @@ import { subscribeNotifications } from '../services/notifications';
 type Tab = 'profile' | 'notifications' | 'household' | 'privacy';
 
 export default function SettingsPage() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { user, householdId, logout } = useAuth();
   const [activeTab, setActiveTab] = useState<Tab>('profile');
 
@@ -75,10 +75,14 @@ export default function SettingsPage() {
       <h1 className="text-2xl font-semibold text-gray-800 mb-6">{t('pages.settings')}</h1>
 
       {/* Tab bar */}
-      <div className="flex gap-1 mb-6 border-b border-gray-200">
+      <div role="tablist" aria-label={t('pages.settings')} className="flex gap-1 mb-6 border-b border-gray-200">
         {tabs.map(({ id, label }) => (
           <button
             key={id}
+            id={`tab-${id}`}
+            role="tab"
+            aria-selected={activeTab === id}
+            aria-controls={`panel-${id}`}
             onClick={() => setActiveTab(id)}
             className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
               activeTab === id
@@ -94,7 +98,7 @@ export default function SettingsPage() {
       <div className="max-w-lg">
         {/* Profile tab */}
         {activeTab === 'profile' && (
-          <section className="space-y-4">
+          <section role="tabpanel" id="panel-profile" aria-labelledby="tab-profile" className="space-y-4">
             <div>
               <label htmlFor="s-name" className="block text-sm font-medium text-gray-700 mb-1">
                 {t('settings.displayName')}
@@ -126,7 +130,12 @@ export default function SettingsPage() {
               <select
                 id="s-locale"
                 value={locale}
-                onChange={(e) => setLocale(e.target.value)}
+                onChange={(e) => {
+                  setLocale(e.target.value);
+                  i18n.changeLanguage(e.target.value).catch((err: unknown) => {
+                    console.error('[i18n] Language change failed:', err);
+                  });
+                }}
                 className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
               >
                 <option value="en">English</option>
@@ -146,7 +155,7 @@ export default function SettingsPage() {
 
         {/* Notifications tab */}
         {activeTab === 'notifications' && (
-          <section className="space-y-5">
+          <section role="tabpanel" id="panel-notifications" aria-labelledby="tab-notifications" className="space-y-5">
             <div>
               <label htmlFor="s-days" className="block text-sm font-medium text-gray-700 mb-1">
                 {t('settings.expiryThreshold')}
@@ -192,7 +201,7 @@ export default function SettingsPage() {
 
         {/* Household tab */}
         {activeTab === 'household' && (
-          <section className="space-y-4">
+          <section role="tabpanel" id="panel-household" aria-labelledby="tab-household" className="space-y-4">
             <div>
               <p className="text-sm text-gray-500 mb-1">{t('settings.householdName')}</p>
               <p className="text-gray-800 font-medium">{householdId ?? '—'}</p>
@@ -208,7 +217,7 @@ export default function SettingsPage() {
 
         {/* Privacy tab */}
         {activeTab === 'privacy' && (
-          <section className="space-y-6">
+          <section role="tabpanel" id="panel-privacy" aria-labelledby="tab-privacy" className="space-y-6">
             <div>
               <h3 className="text-sm font-medium text-gray-700 mb-2">{t('settings.exportData')}</h3>
               <button

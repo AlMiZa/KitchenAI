@@ -1,4 +1,4 @@
-import { Outlet, NavLink } from 'react-router-dom';
+import { Outlet, NavLink, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import NotificationBell from '../components/NotificationBell';
 import LanguageSwitcher from '../components/LanguageSwitcher';
@@ -7,6 +7,7 @@ import CookieBanner from '../components/CookieBanner';
 /** Primary application layout with header navigation and footer. */
 export default function MainLayout() {
   const { t } = useTranslation();
+  const location = useLocation();
 
   const navLinks = [
     { to: '/', label: t('nav.dashboard'), end: true },
@@ -15,6 +16,12 @@ export default function MainLayout() {
     { to: '/shopping-list', label: t('nav.shoppingList') },
     { to: '/settings', label: t('nav.settings') },
   ];
+
+  // Derive a human-readable page label for the screen-reader live region.
+  const currentPageLabel =
+    navLinks.find(({ to, end }) =>
+      end ? location.pathname === to : location.pathname.startsWith(to),
+    )?.label ?? t('common.kitchenAI');
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
@@ -50,6 +57,10 @@ export default function MainLayout() {
       </header>
 
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Visually-hidden live region announces route changes to screen readers */}
+        <div aria-live="polite" aria-atomic="true" className="sr-only">
+          {currentPageLabel}
+        </div>
         <Outlet />
       </main>
 

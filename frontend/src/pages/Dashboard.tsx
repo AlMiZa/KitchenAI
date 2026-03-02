@@ -5,9 +5,10 @@ import { useAuth } from '../hooks/useAuth';
 import { getAnalytics } from '../services/analytics';
 import { getItems } from '../services/items';
 import LanguageSwitcher from '../components/LanguageSwitcher';
+import { formatDate } from '../utils/dateFormat';
 
 export default function DashboardPage() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { householdId } = useAuth();
   const navigate = useNavigate();
 
@@ -111,7 +112,7 @@ export default function DashboardPage() {
                 <span className="text-gray-800 text-sm font-medium">{item.name}</span>
                 <span className="text-xs text-amber-600 font-medium">
                   {item.expiryDate
-                    ? new Date(item.expiryDate).toLocaleDateString()
+                    ? formatDate(item.expiryDate, i18n.language)
                     : ''}
                 </span>
               </li>

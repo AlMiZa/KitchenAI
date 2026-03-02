@@ -82,6 +82,9 @@
     "useBy": "Use by",
     "noItems": "No items in inventory",
     "expiresToday": "Today",
+    "expired": "Expired",
+    "status": "Status",
+    "expiresInDays": "{{days}}d",
     "invalidQty": "Quantity must be a positive number",
     "locations": {
       "fridge": "Fridge",

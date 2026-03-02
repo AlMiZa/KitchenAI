@@ -7,6 +7,7 @@ import {
   markAllRead,
 } from '../services/notifications';
 import type { AppNotification } from '../services/notifications';
+import { formatDateTime } from '../utils/dateFormat';
 
 function typeIcon(type: AppNotification['type']): string {
   switch (type) {
@@ -19,7 +20,7 @@ function typeIcon(type: AppNotification['type']): string {
 
 /** Bell icon with unread-count badge + dropdown panel. Polls every 30 s. */
 export default function NotificationBell() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { householdId } = useAuth();
   const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
@@ -83,6 +84,7 @@ export default function NotificationBell() {
           className="absolute right-0 mt-2 w-80 bg-white rounded-xl shadow-xl
                      border border-gray-200 z-50 overflow-hidden"
           role="dialog"
+          aria-modal="true"
           aria-label={t('notifications.title')}
         >
           <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100">
@@ -112,7 +114,7 @@ export default function NotificationBell() {
                   <div className="flex-1 min-w-0">
                     <p className="text-sm text-gray-800 break-words">{n.message}</p>
                     <p className="text-xs text-gray-400 mt-0.5">
-                      {new Date(n.createdAt).toLocaleString()}
+                      {formatDateTime(n.createdAt, i18n.language)}
                     </p>
                   </div>
                 </li>

@@ -82,6 +82,9 @@
     "useBy": "Należy spożyć do",
     "noItems": "Brak produktów w spiżarni",
     "expiresToday": "Dziś",
+    "expired": "Przeterminowany",
+    "status": "Status",
+    "expiresInDays": "{{days}}d",
     "invalidQty": "Ilość musi być liczbą dodatnią",
     "locations": {
       "fridge": "Lodówka",

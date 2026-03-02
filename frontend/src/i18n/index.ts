@@ -19,6 +19,13 @@ i18n
     interpolation: {
       escapeValue: false,
     },
+    saveMissing: true,
+    missingKeyHandler: (_lngs: readonly string[], _ns: string, key: string) => {
+      // Only log in non-production environments to avoid cluttering production console.
+      if (process.env.NODE_ENV !== 'production') {
+        console.warn(`[i18n] Missing translation key: "${key}"`);
+      }
+    },
   });
 
 export default i18n;
