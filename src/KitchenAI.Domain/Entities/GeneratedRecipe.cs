@@ -4,6 +4,7 @@ namespace KitchenAI.Domain.Entities;
 public class GeneratedRecipe
 {
     public Guid Id { get; set; }
+    public Guid HouseholdId { get; set; }
 
     /// <summary>Full JSON response returned by the LLM.</summary>
     public string RecipeJson { get; set; } = string.Empty;
@@ -14,5 +15,12 @@ public class GeneratedRecipe
     /// <summary>JSON snapshot of the inventory item IDs used during generation.</summary>
     public string? MatchedInventorySnapshot { get; set; }
 
+    /// <summary>The prompt template sent to the LLM for audit.</summary>
+    public string? PromptTemplate { get; set; }
+
+    /// <summary>Raw JSON response from the LLM for audit.</summary>
+    public string? LlmResponseJson { get; set; }
+
     public User RequestedByUser { get; set; } = null!;
+    public Household Household { get; set; } = null!;
 }

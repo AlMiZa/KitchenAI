@@ -6,9 +6,10 @@ namespace KitchenAI.Application.Services;
 /// <summary>Generates recipe suggestions, optionally using an LLM backend.</summary>
 public interface ILlmService
 {
-    /// <summary>Returns a list of recipe suggestions based on the household's inventory and constraints.</summary>
+    /// <summary>Returns a list of recipe suggestions based on the household's inventory, adapter candidates, and constraints.</summary>
     Task<List<GeneratedRecipeDto>> GenerateRecipesAsync(
         IList<Item> items,
+        IList<GeneratedRecipeDto> candidateRecipes,
         RecipeConstraints constraints,
         CancellationToken cancellationToken = default);
 }

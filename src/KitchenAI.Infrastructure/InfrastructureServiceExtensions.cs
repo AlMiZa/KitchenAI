@@ -1,4 +1,5 @@
 using KitchenAI.Application.Persistence;
+using KitchenAI.Application.Recipes;
 using KitchenAI.Application.Services;
 using KitchenAI.Infrastructure.BackgroundServices;
 using KitchenAI.Infrastructure.Persistence;
@@ -26,13 +27,19 @@ public static class InfrastructureServiceExtensions
         // Register AppDbContext as IAppDbContext so Application handlers can resolve it
         services.AddScoped<IAppDbContext>(sp => sp.GetRequiredService<AppDbContext>());
 
+        services.AddMemoryCache();
+
         services.AddScoped<ITokenService, TokenService>();
         services.AddScoped<IEmailService, EmailService>();
         services.AddScoped<ILlmService, LlmService>();
+        services.AddScoped<IRecipeAdapter, StubRecipeAdapter>();
+        services.AddSingleton<IGenerationRateLimiter, InMemoryGenerationRateLimiter>();
         services.AddScoped<ExpiryNotificationJob>();
         services.AddHostedService<ExpiryNotificationService>();
+
+        services.Configure<GenerationRateLimitOptions>(
+            configuration.GetSection(GenerationRateLimitOptions.SectionName));
 
         return services;
     }
 }
-

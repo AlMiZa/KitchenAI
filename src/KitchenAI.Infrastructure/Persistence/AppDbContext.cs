@@ -109,6 +109,10 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
                   .WithMany()
                   .HasForeignKey(g => g.RequestedBy)
                   .OnDelete(DeleteBehavior.Restrict);
+            entity.HasOne(g => g.Household)
+                  .WithMany()
+                  .HasForeignKey(g => g.HouseholdId)
+                  .OnDelete(DeleteBehavior.Cascade);
         });
 
         // Notification
