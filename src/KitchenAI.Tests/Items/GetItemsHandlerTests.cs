@@ -24,24 +24,36 @@ public class GetItemsHandlerTests
         db.Items.AddRange(
             new Item
             {
-                Id = Guid.NewGuid(), HouseholdId = householdId, Name = "Yogurt",
-                Quantity = 1, Unit = "pcs",
+                Id = Guid.NewGuid(),
+                HouseholdId = householdId,
+                Name = "Yogurt",
+                Quantity = 1,
+                Unit = "pcs",
                 ExpiryDate = DateOnly.FromDateTime(now.AddDays(3)),
-                CreatedAt = now, UpdatedAt = now
+                CreatedAt = now,
+                UpdatedAt = now
             },
             new Item
             {
-                Id = Guid.NewGuid(), HouseholdId = householdId, Name = "Milk",
-                Quantity = 1, Unit = "L",
+                Id = Guid.NewGuid(),
+                HouseholdId = householdId,
+                Name = "Milk",
+                Quantity = 1,
+                Unit = "L",
                 ExpiryDate = DateOnly.FromDateTime(now.AddDays(1)),
-                CreatedAt = now, UpdatedAt = now
+                CreatedAt = now,
+                UpdatedAt = now
             },
             new Item
             {
-                Id = Guid.NewGuid(), HouseholdId = householdId, Name = "Pasta",
-                Quantity = 1, Unit = "kg",
+                Id = Guid.NewGuid(),
+                HouseholdId = householdId,
+                Name = "Pasta",
+                Quantity = 1,
+                Unit = "kg",
                 ExpiryDate = DateOnly.FromDateTime(now.AddDays(30)),
-                CreatedAt = now, UpdatedAt = now
+                CreatedAt = now,
+                UpdatedAt = now
             });
         await db.SaveChangesAsync();
 

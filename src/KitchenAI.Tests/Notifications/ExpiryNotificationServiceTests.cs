@@ -25,17 +25,25 @@ public class ExpiryNotificationServiceTests
         db.Items.AddRange(
             new Item
             {
-                Id = Guid.NewGuid(), HouseholdId = householdId,
-                Name = "Yogurt", Quantity = 1, Unit = "pcs",
+                Id = Guid.NewGuid(),
+                HouseholdId = householdId,
+                Name = "Yogurt",
+                Quantity = 1,
+                Unit = "pcs",
                 ExpiryDate = DateOnly.FromDateTime(now.AddDays(1)),
-                CreatedAt = now, UpdatedAt = now
+                CreatedAt = now,
+                UpdatedAt = now
             },
             new Item
             {
-                Id = Guid.NewGuid(), HouseholdId = householdId,
-                Name = "Cheese", Quantity = 1, Unit = "pcs",
+                Id = Guid.NewGuid(),
+                HouseholdId = householdId,
+                Name = "Cheese",
+                Quantity = 1,
+                Unit = "pcs",
                 ExpiryDate = DateOnly.FromDateTime(now.AddDays(2)),
-                CreatedAt = now, UpdatedAt = now
+                CreatedAt = now,
+                UpdatedAt = now
             });
         await db.SaveChangesAsync();
 
@@ -61,10 +69,14 @@ public class ExpiryNotificationServiceTests
 
         db.Items.Add(new Item
         {
-            Id = Guid.NewGuid(), HouseholdId = householdId,
-            Name = "Milk", Quantity = 1, Unit = "L",
+            Id = Guid.NewGuid(),
+            HouseholdId = householdId,
+            Name = "Milk",
+            Quantity = 1,
+            Unit = "L",
             ExpiryDate = DateOnly.FromDateTime(now.AddDays(1)),
-            CreatedAt = now, UpdatedAt = now
+            CreatedAt = now,
+            UpdatedAt = now
         });
         await db.SaveChangesAsync();
 
@@ -90,10 +102,14 @@ public class ExpiryNotificationServiceTests
 
         db.Items.Add(new Item
         {
-            Id = itemId, HouseholdId = householdId,
-            Name = "Butter", Quantity = 1, Unit = "pcs",
+            Id = itemId,
+            HouseholdId = householdId,
+            Name = "Butter",
+            Quantity = 1,
+            Unit = "pcs",
             ExpiryDate = DateOnly.FromDateTime(now.AddDays(1)),
-            CreatedAt = now, UpdatedAt = now
+            CreatedAt = now,
+            UpdatedAt = now
         });
         await db.SaveChangesAsync();
 
@@ -123,11 +139,15 @@ public class ExpiryNotificationServiceTests
 
         db.Items.Add(new Item
         {
-            Id = Guid.NewGuid(), HouseholdId = householdId,
-            Name = "Old Milk", Quantity = 1, Unit = "L",
+            Id = Guid.NewGuid(),
+            HouseholdId = householdId,
+            Name = "Old Milk",
+            Quantity = 1,
+            Unit = "L",
             ExpiryDate = DateOnly.FromDateTime(now.AddDays(1)),
             IsArchived = true,
-            CreatedAt = now, UpdatedAt = now
+            CreatedAt = now,
+            UpdatedAt = now
         });
         await db.SaveChangesAsync();
 
