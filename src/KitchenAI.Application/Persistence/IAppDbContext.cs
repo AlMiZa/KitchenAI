@@ -16,6 +16,7 @@ public interface IAppDbContext
     DbSet<Notification> Notifications { get; }
     DbSet<AnalyticsEvent> AnalyticsEvents { get; }
     DbSet<AdminSetting> AdminSettings { get; }
+    DbSet<MagicLinkToken> MagicLinkTokens { get; }
 
     /// <summary>Saves all pending changes to the database.</summary>
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
