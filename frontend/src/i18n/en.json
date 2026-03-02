@@ -61,7 +61,10 @@
     "generateRecipes": "Generate Recipes from My Fridge",
     "expiringItems": "Items Expiring Soon",
     "noExpiringItems": "No items expiring soon 🎉",
-    "householdSelector": "Household selector"
+    "householdSelector": "Household selector",
+    "analyticsError": "Could not load analytics data.",
+    "quickAddPlaceholder": "Item name…",
+    "quickAddButton": "Add Item"
   },
   "inventory": {
     "addItem": "Add Item",
