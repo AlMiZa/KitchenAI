@@ -40,7 +40,7 @@ export default function RegisterPage() {
     setLoading(true);
     try {
       await register({ email, password, displayName });
-      navigate('/');
+      navigate('/dashboard');
     } catch {
       setErrors({ general: t('auth.registerError') });
     } finally {

@@ -23,6 +23,7 @@ export default function AppRoutes() {
       {/* Main application routes */}
       <Route element={<MainLayout />}>
         <Route index element={<DashboardPage />} />
+        <Route path="dashboard" element={<DashboardPage />} />
         <Route path="inventory" element={<InventoryPage />} />
         <Route path="recipes" element={<RecipesPage />} />
         <Route path="recipes/:recipeId" element={<RecipeDetailPage />} />

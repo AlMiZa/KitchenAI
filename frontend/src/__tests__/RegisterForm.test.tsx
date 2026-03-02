@@ -4,6 +4,14 @@ import { MemoryRouter } from 'react-router-dom';
 import i18n from '../i18n/index';
 import RegisterPage from '../pages/auth/Register';
 
+const mockNavigate = jest.fn();
+const mockRegister = jest.fn();
+
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useNavigate: () => mockNavigate,
+}));
+
 // Provide a safe no-op AuthProvider/useAuth for these tests
 jest.mock('../hooks/useAuth', () => ({
   useAuth: () => ({
@@ -11,7 +19,7 @@ jest.mock('../hooks/useAuth', () => ({
     householdId: null,
     loading: false,
     login: jest.fn(),
-    register: jest.fn().mockRejectedValue(new Error('mock')),
+    register: mockRegister,
     logout: jest.fn(),
   }),
   AuthProvider: ({ children }: { children: React.ReactNode }) => <>{children}</>,
@@ -20,6 +28,11 @@ jest.mock('../hooks/useAuth', () => ({
 // Run tests in English so selectors match
 beforeAll(async () => { await i18n.changeLanguage('en'); });
 afterAll(async  () => { await i18n.changeLanguage('pl'); });
+beforeEach(() => {
+  mockNavigate.mockReset();
+  mockRegister.mockReset();
+  mockRegister.mockRejectedValue(new Error('mock'));
+});
 
 function renderRegister() {
   return render(
@@ -59,5 +72,20 @@ describe('Register form validation', () => {
     // Should show invalid email message
     expect(screen.getByText(/valid email/i)).toBeInTheDocument();
   });
+
+  it('navigates to /dashboard on successful registration', async () => {
+    mockRegister.mockResolvedValueOnce(undefined);
+    const user = userEvent.setup();
+    renderRegister();
+
+    await user.type(screen.getByLabelText(/display name/i), 'Test User');
+    await user.type(screen.getByLabelText(/email/i), 'test@example.com');
+    await user.type(screen.getByLabelText(/password/i), 'password123');
+
+    await user.click(screen.getByRole('button', { name: /sign up/i }));
+
+    expect(mockNavigate).toHaveBeenCalledWith('/dashboard');
+  });
 });
+
 
