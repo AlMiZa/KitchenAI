@@ -1,7 +1,4 @@
 using KitchenAI.Application.Notifications;
-using KitchenAI.Domain.Entities;
-using KitchenAI.Domain.Enums;
-using KitchenAI.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,7 +7,7 @@ namespace KitchenAI.Api.Controllers;
 /// <summary>Notification retrieval and subscription management for a household.</summary>
 [Authorize]
 [Route("api/households/{hid:guid}/notifications")]
-public class NotificationsController(AppDbContext db) : ApiControllerBase
+public class NotificationsController : ApiControllerBase
 {
     /// <summary>Returns undelivered notifications for the household.</summary>
     [HttpGet]
@@ -38,25 +35,7 @@ public class NotificationsController(AppDbContext db) : ApiControllerBase
     public async Task<IActionResult> Test(Guid hid, CancellationToken ct)
     {
         ValidateHouseholdAccess(hid);
-
-        var notification = new Notification
-        {
-            Id = Guid.NewGuid(),
-            HouseholdId = hid,
-            Type = NotificationType.RecipeSuggestion,
-            Payload = """{"message":"This is a test notification."}""",
-            Delivered = false,
-            CreatedAt = DateTime.UtcNow
-        };
-
-        db.Notifications.Add(notification);
-        await db.SaveChangesAsync(ct);
-
-        return Ok(new NotificationDto(
-            notification.Id,
-            notification.Type,
-            notification.Payload,
-            notification.Delivered,
-            notification.CreatedAt));
+        var result = await Mediator.Send(new CreateTestNotificationCommand(hid), ct);
+        return Ok(result);
     }
 }
