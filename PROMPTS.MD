@@ -22,3 +22,26 @@ This file logs all prompts used during the KitchenAI project development with Gi
 | 14 | US-001-BE — Account creation — Backend | Implement passwordless magic-link flow: add `MagicLinkToken` domain entity, `IEmailService`/`EmailService` stub, `PasswordlessRequestCommand`/`PasswordlessRequestHandler`, `POST /api/auth/passwordless/request` controller endpoint, EF migration, and two unit tests. All other auth endpoints (register, login, me) and their tests were already in place. |
 | 15 | US-002-BE — Add inventory item — Backend | Strengthen `CreateItemHandlerTests.ValidItem_PersistedCorrectly` to assert all fields (AllowFraction, PurchaseDate, ExpiryDate, BestByOrUseBy, Brand, Notes). Add `FractionalQuantity_StoredWithoutRounding` test. Create `MergeItemsHandlerTests.cs` with tests for combining quantities, single-item guard, and not-found guard. |
 | 16 | US-002-FE — Add inventory item — Frontend | Add missing Jest/RTL test: unit dropdown in Add/Edit Item modal only shows the five metric options (g, kg, ml, L, pcs), completing the three required frontend tests for the inventory feature (expiry-date sort, fractional qty, metric units). |
+
+## US-003-BE: Recipe Generation Backend
+
+### What was implemented
+- Added `HouseholdId`, `PromptTemplate`, and `LlmResponseJson` fields to `GeneratedRecipe` entity
+- Added `IRecipeAdapter` interface in Application layer for querying external recipe databases
+- Added `StubRecipeAdapter` in Infrastructure (stub returning 2 fallback recipes)
+- Added `IGenerationRateLimiter` interface and `InMemoryGenerationRateLimiter` (sliding window, per-household, 1-hour window using IMemoryCache with per-key locking to prevent race conditions)
+- Added `GenerationRateLimitOptions` (configurable via `RecipeGeneration:MaxRequestsPerHour`)
+- Updated `ILlmService.GenerateRecipesAsync` to accept `IList<GeneratedRecipeDto> candidateRecipes`
+- Updated `LlmService` to match new signature
+- Rewrote `GenerateRecipeHandler` with hybrid adapter+LLM flow, result caching (10 min, keyed by item IDs+quantities+constraints), and fallback logic
+- Added `RateLimitExceededException` mapped to HTTP 429
+- Added `InternalController` with admin-only endpoints for adapter search, nutrition, and direct LLM access
+- Added EF migration `AddGeneratedRecipeHouseholdId`
+- Added 4 new tests: valid items returns 2 recipes, adapter+LLM integration, fallback to adapter on invalid LLM output, rate limit exceeded
+
+### Architecture decisions
+- `IRecipeAdapter` and `IGenerationRateLimiter` are in Application (no infra dependency)
+- `InMemoryGenerationRateLimiter` is registered as Singleton (cache-backed); uses per-household locks to prevent concurrent request races
+- `GenerateRecipeHandler` caches results by inventory snapshot (item IDs + quantities) + constraints for 10 minutes; quantities included in key to invalidate when inventory changes
+- Fallback: LLM output validated (≥2 recipes, non-empty title/ingredients/steps); falls back to adapter if invalid
+- `PromptTemplate` is built for audit after LLM call completes (not passed to stub LLM service)
