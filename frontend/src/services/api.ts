@@ -23,8 +23,13 @@ export async function apiFetch<T>(path: string, options?: RequestInit): Promise<
     },
   });
   if (!res.ok) {
-    const err = await res.text();
-    throw new Error(err || res.statusText);
+    const text = await res.text();
+    let message = text || res.statusText;
+    try {
+      const json = JSON.parse(text);
+      if (json.error) message = json.error;
+    } catch { /* not JSON — use raw text */ }
+    throw new Error(message);
   }
   if (res.status === 204) return undefined as T;
   return res.json() as Promise<T>;
