@@ -23,22 +23,35 @@ public class CheckRecipeAvailabilityHandlerTests
 
         db.Items.Add(new Item
         {
-            Id = Guid.NewGuid(), HouseholdId = householdId,
-            Name = ingredientName, Quantity = availableQty, Unit = "g",
-            CreatedAt = now, UpdatedAt = now
+            Id = Guid.NewGuid(),
+            HouseholdId = householdId,
+            Name = ingredientName,
+            Quantity = availableQty,
+            Unit = "g",
+            CreatedAt = now,
+            UpdatedAt = now
         });
 
         var recipe = new Recipe
         {
-            Id = recipeId, HouseholdId = householdId, Title = "Test Recipe",
-            Source = RecipeSource.Generated, Servings = 2, PrepTime = 5, CookTime = 10,
-            CreatedAt = now, UpdatedAt = now
+            Id = recipeId,
+            HouseholdId = householdId,
+            Title = "Test Recipe",
+            Source = RecipeSource.Generated,
+            Servings = 2,
+            PrepTime = 5,
+            CookTime = 10,
+            CreatedAt = now,
+            UpdatedAt = now
         };
         db.Recipes.Add(recipe);
         db.RecipeIngredients.Add(new RecipeIngredient
         {
-            Id = Guid.NewGuid(), RecipeId = recipeId,
-            Name = ingredientName, Quantity = requiredQty, Unit = "g"
+            Id = Guid.NewGuid(),
+            RecipeId = recipeId,
+            Name = ingredientName,
+            Quantity = requiredQty,
+            Unit = "g"
         });
 
         await db.SaveChangesAsync();

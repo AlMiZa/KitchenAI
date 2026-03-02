@@ -35,15 +35,23 @@ public class GenerateRecipeHandlerTests
         db.Items.AddRange(
             new Item
             {
-                Id = Guid.NewGuid(), HouseholdId = householdId,
-                Name = "Tomato", Quantity = 3, Unit = "pcs",
-                CreatedAt = now, UpdatedAt = now
+                Id = Guid.NewGuid(),
+                HouseholdId = householdId,
+                Name = "Tomato",
+                Quantity = 3,
+                Unit = "pcs",
+                CreatedAt = now,
+                UpdatedAt = now
             },
             new Item
             {
-                Id = Guid.NewGuid(), HouseholdId = householdId,
-                Name = "Pasta", Quantity = 500, Unit = "g",
-                CreatedAt = now, UpdatedAt = now
+                Id = Guid.NewGuid(),
+                HouseholdId = householdId,
+                Name = "Pasta",
+                Quantity = 500,
+                Unit = "g",
+                CreatedAt = now,
+                UpdatedAt = now
             });
         await db.SaveChangesAsync();
 
