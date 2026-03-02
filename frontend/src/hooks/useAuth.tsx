@@ -7,6 +7,8 @@ import { getToken, setToken, clearToken } from '../services/api';
 interface AuthContextType {
   user: UserProfile | null;
   householdId: string | null;
+  activeHouseholdId: string | null;
+  setActiveHouseholdId: (id: string) => void;
   loading: boolean;
   login: (data: { email: string; password: string }) => Promise<void>;
   register: (data: { email: string; password: string; displayName: string }) => Promise<void>;
@@ -17,6 +19,8 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType>({
   user: null,
   householdId: null,
+  activeHouseholdId: null,
+  setActiveHouseholdId: () => {},
   loading: false,
   login: async () => {},
   register: async () => {},
@@ -26,6 +30,7 @@ const AuthContext = createContext<AuthContextType>({
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
+  const [activeHouseholdId, setActiveHouseholdId] = useState<string | null>(null);
 
   useEffect(() => {
     const token = getToken();
@@ -35,7 +40,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
     authService
       .getMe()
-      .then((profile) => setUser(profile))
+      .then((profile) => {
+        setUser(profile);
+        setActiveHouseholdId((prev) => prev ?? profile.householdId ?? null);
+      })
       .catch(() => clearToken())
       .finally(() => setLoading(false));
   }, []);
@@ -45,6 +53,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setToken(result.token);
     const profile = await authService.getMe();
     setUser(profile);
+    setActiveHouseholdId(profile.householdId ?? null);
   };
 
   const register = async (data: {
@@ -56,16 +65,29 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setToken(result.token);
     const profile = await authService.getMe();
     setUser(profile);
+    setActiveHouseholdId(profile.householdId ?? null);
   };
 
   const logout = () => {
     clearToken();
     setUser(null);
+    setActiveHouseholdId(null);
   };
+
+  const effectiveHouseholdId = activeHouseholdId ?? user?.householdId ?? null;
 
   return (
     /* React 19: render context directly instead of <AuthContext.Provider> */
-    <AuthContext value={{ user, householdId: user?.householdId ?? null, loading, login, register, logout }}>
+    <AuthContext value={{
+      user,
+      householdId: effectiveHouseholdId,
+      activeHouseholdId: effectiveHouseholdId,
+      setActiveHouseholdId,
+      loading,
+      login,
+      register,
+      logout,
+    }}>
       {children}
     </AuthContext>
   );

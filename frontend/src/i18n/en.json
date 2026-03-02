@@ -60,7 +60,8 @@
     "topIngredients": "Top Ingredients",
     "generateRecipes": "Generate Recipes from My Fridge",
     "expiringItems": "Items Expiring Soon",
-    "noExpiringItems": "No items expiring soon 🎉"
+    "noExpiringItems": "No items expiring soon 🎉",
+    "householdSelector": "Household selector"
   },
   "inventory": {
     "addItem": "Add Item",
@@ -148,7 +149,18 @@
     "saveNotifications": "Save Notifications",
     "householdName": "Household",
     "memberCount": "Members",
-    "inviteMember": "Invite Member (coming soon)",
+    "members": "Members",
+    "noMembers": "No members found.",
+    "inviteMember": "Invite Member",
+    "inviteLink": "Share this invite link:",
+    "copyLink": "Copy",
+    "inviteLinkError": "Could not load invite link.",
+    "leaveHousehold": "Leave Household",
+    "leaveConfirm": "Are you sure you want to leave this household?",
+    "role": {
+      "owner": "Owner",
+      "member": "Member"
+    },
     "exportData": "Export My Data",
     "deleteAccount": "Delete My Account",
     "deleteConfirm": "Are you sure? This action cannot be undone.",
