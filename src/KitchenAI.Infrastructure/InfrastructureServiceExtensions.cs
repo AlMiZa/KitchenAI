@@ -27,6 +27,7 @@ public static class InfrastructureServiceExtensions
         services.AddScoped<IAppDbContext>(sp => sp.GetRequiredService<AppDbContext>());
 
         services.AddScoped<ITokenService, TokenService>();
+        services.AddScoped<IEmailService, EmailService>();
         services.AddScoped<ILlmService, LlmService>();
         services.AddScoped<ExpiryNotificationJob>();
         services.AddHostedService<ExpiryNotificationService>();

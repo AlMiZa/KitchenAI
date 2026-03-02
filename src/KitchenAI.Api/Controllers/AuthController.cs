@@ -24,6 +24,14 @@ public class AuthController : ApiControllerBase
         return Ok(result);
     }
 
+    /// <summary>Sends a passwordless magic-link to the given email address.</summary>
+    [HttpPost("passwordless/request")]
+    public async Task<IActionResult> PasswordlessRequest([FromBody] PasswordlessRequestCommand command, CancellationToken ct)
+    {
+        await Mediator.Send(command, ct);
+        return Ok(new { message = "If the address is registered, a magic link has been sent." });
+    }
+
     /// <summary>Returns the current authenticated user's profile.</summary>
     [Authorize]
     [HttpGet("me")]
