@@ -63,6 +63,20 @@ describe('InventoryList', () => {
     expect(eggsIdx).toBeLessThan(milkIdx);
   });
 
+  it('unit dropdown only shows metric options', async () => {
+    const user = userEvent.setup();
+    renderInventory();
+
+    await screen.findByText('Bread');
+
+    await user.click(screen.getByRole('button', { name: /add item/i }));
+
+    const unitSelect = screen.getByLabelText(/unit/i) as HTMLSelectElement;
+    const options = Array.from(unitSelect.options).map((o) => o.value);
+
+    expect(options).toEqual(['g', 'kg', 'ml', 'L', 'pcs']);
+  });
+
   it('fractional qty input: accepts 0.5 and ignores alphabetic input', async () => {
     const user = userEvent.setup();
     renderInventory();
