@@ -80,7 +80,8 @@
       "fridge": "Lodówka",
       "freezer": "Zamrażarka",
       "pantry": "Spiżarnia",
-      "cabinet": "Szafka"
+      "cabinet": "Szafka",
+      "other": "Inne"
     },
     "units": {
       "g": "g",

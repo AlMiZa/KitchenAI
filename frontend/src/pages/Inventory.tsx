@@ -10,7 +10,7 @@ import {
 } from '../services/items';
 import type { InventoryItem, CreateItemInput } from '../services/items';
 
-type StorageLocation = 'fridge' | 'freezer' | 'pantry' | 'cabinet';
+type StorageLocation = 'fridge' | 'freezer' | 'pantry' | 'other';
 type ItemUnit = 'g' | 'kg' | 'ml' | 'L' | 'pcs';
 
 interface ItemFormData {
@@ -19,7 +19,7 @@ interface ItemFormData {
   unit: ItemUnit;
   purchaseDate: string;
   expiryDate: string;
-  expiryType: 'best_by' | 'use_by';
+  expiryType: 'bestBy' | 'useBy';
   storageLocation: StorageLocation | '';
   brand: string;
   price: string;
@@ -32,7 +32,7 @@ const DEFAULT_FORM: ItemFormData = {
   unit: 'pcs',
   purchaseDate: '',
   expiryDate: '',
-  expiryType: 'best_by',
+  expiryType: 'bestBy',
   storageLocation: '',
   brand: '',
   price: '',
@@ -86,12 +86,14 @@ export default function InventoryPage() {
   const createMut = useMutation({
     mutationFn: (data: CreateItemInput) => createItem(householdId!, data),
     onSuccess: () => { queryClient.invalidateQueries({ queryKey: ['items', householdId] }); closeModal(); },
+    onError: (err: Error) => setFormErrors({ name: err.message || t('common.error') }),
   });
 
   const updateMut = useMutation({
     mutationFn: ({ id, data }: { id: string; data: Partial<CreateItemInput> }) =>
       updateItem(householdId!, id, data),
     onSuccess: () => { queryClient.invalidateQueries({ queryKey: ['items', householdId] }); closeModal(); },
+    onError: (err: Error) => setFormErrors({ name: err.message || t('common.error') }),
   });
 
   const deleteMut = useMutation({
@@ -131,7 +133,7 @@ export default function InventoryPage() {
       unit:            item.unit,
       purchaseDate:    item.purchaseDate    ?? '',
       expiryDate:      item.expiryDate      ?? '',
-      expiryType:      item.expiryType      ?? 'best_by',
+      expiryType:      item.bestByOrUseBy   ?? 'bestBy',
       storageLocation: item.storageLocation ?? '',
       brand:           item.brand           ?? '',
       price:           item.price !== undefined ? String(item.price) : '',
@@ -161,6 +163,7 @@ export default function InventoryPage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!householdId) { setFormErrors({ name: t('auth.pleaseLogin') }); return; }
     if (!validateForm()) return;
     const payload: CreateItemInput = {
       name:            form.name.trim(),
@@ -168,7 +171,7 @@ export default function InventoryPage() {
       unit:            form.unit,
       purchaseDate:    form.purchaseDate    || undefined,
       expiryDate:      form.expiryDate      || undefined,
-      expiryType:      form.expiryType,
+      bestByOrUseBy:   form.expiryType,
       storageLocation: (form.storageLocation as StorageLocation) || undefined,
       brand:           form.brand           || undefined,
       price:           form.price ? parseFloat(form.price) : undefined,
@@ -208,7 +211,7 @@ export default function InventoryPage() {
           <option value="fridge">{t('inventory.locations.fridge')}</option>
           <option value="freezer">{t('inventory.locations.freezer')}</option>
           <option value="pantry">{t('inventory.locations.pantry')}</option>
-          <option value="cabinet">{t('inventory.locations.cabinet')}</option>
+          <option value="other">{t('inventory.locations.other')}</option>
         </select>
 
         <label className="flex items-center gap-2 text-sm text-gray-600 cursor-pointer select-none">
@@ -365,12 +368,12 @@ export default function InventoryPage() {
                   onChange={(e) => setForm({ ...form, expiryDate: e.target.value })}
                   className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500" />
                 <div className="flex gap-6 mt-2">
-                  {(['best_by', 'use_by'] as const).map((type) => (
+                  {(['bestBy', 'useBy'] as const).map((type) => (
                     <label key={type} className="flex items-center gap-1.5 text-sm text-gray-600 cursor-pointer">
                       <input type="radio" name="expiry-type" value={type}
                         checked={form.expiryType === type}
                         onChange={() => setForm({ ...form, expiryType: type })} />
-                      {type === 'best_by' ? t('inventory.bestBy') : t('inventory.useBy')}
+                      {type === 'bestBy' ? t('inventory.bestBy') : t('inventory.useBy')}
                     </label>
                   ))}
                 </div>
@@ -388,7 +391,7 @@ export default function InventoryPage() {
                   <option value="fridge">{t('inventory.locations.fridge')}</option>
                   <option value="freezer">{t('inventory.locations.freezer')}</option>
                   <option value="pantry">{t('inventory.locations.pantry')}</option>
-                  <option value="cabinet">{t('inventory.locations.cabinet')}</option>
+                  <option value="other">{t('inventory.locations.other')}</option>
                 </select>
               </div>
 

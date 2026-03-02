@@ -80,7 +80,8 @@
       "fridge": "Fridge",
       "freezer": "Freezer",
       "pantry": "Pantry",
-      "cabinet": "Cabinet"
+      "cabinet": "Cabinet",
+      "other": "Other"
     },
     "units": {
       "g": "g",
