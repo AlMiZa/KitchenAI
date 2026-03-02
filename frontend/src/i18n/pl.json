@@ -158,6 +158,9 @@
     "deleteConfirm": "Czy na pewno? Tej operacji nie można cofnąć.",
     "profileSaved": "Profil zapisany pomyślnie",
     "notificationsSaved": "Ustawienia powiadomień zapisane",
+    "analyticsConsent": "Analityka i śledzenie",
+    "analyticsConsentNote": "Zezwól KitchenAI na zbieranie anonimowych danych analitycznych w celu ulepszania usługi.",
+    "dataRetentionPolicy": "Polityka przechowywania danych: dane gospodarstwa są przechowywane przez 24 miesiące nieaktywności, po czym są trwale usuwane.",
     "members": "Członkowie",
     "noMembers": "Nie znaleziono członków.",
     "inviteLink": "Udostępnij link z zaproszeniem:",
@@ -193,6 +196,8 @@
   },
   "cookie": {
     "message": "Używamy ciasteczek, aby poprawić Twoje doświadczenia. Korzystając z KitchenAI, zgadzasz się z naszą polityką cookies.",
-    "accept": "Akceptuj wszystkie"
+    "bannerLabel": "Zgoda na pliki cookie",
+    "accept": "Akceptuj wszystkie",
+    "decline": "Odrzuć"
   }
 }

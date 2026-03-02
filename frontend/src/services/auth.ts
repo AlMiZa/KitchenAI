@@ -14,6 +14,7 @@ export interface UserProfile {
   displayName: string;
   locale: string;
   householdId: string | null;
+  role: string;
 }
 
 export const register = (data: { email: string; password: string; displayName: string }) =>

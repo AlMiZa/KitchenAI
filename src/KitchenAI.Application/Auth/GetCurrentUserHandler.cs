@@ -22,6 +22,6 @@ public class GetCurrentUserHandler(IAppDbContext db) : IRequestHandler<GetCurren
                 .Select(m => (Guid?)m.HouseholdId)
                 .FirstOrDefaultAsync(cancellationToken);
 
-        return new UserDto(user.Id, user.Email, user.DisplayName, user.Locale, householdId);
+        return new UserDto(user.Id, user.Email, user.DisplayName, user.Locale, householdId, user.Role);
     }
 }

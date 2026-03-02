@@ -168,7 +168,10 @@
     "deleteAccount": "Delete My Account",
     "deleteConfirm": "Are you sure? This action cannot be undone.",
     "profileSaved": "Profile saved successfully",
-    "notificationsSaved": "Notification settings saved"
+    "notificationsSaved": "Notification settings saved",
+    "analyticsConsent": "Analytics & Tracking",
+    "analyticsConsentNote": "Allow KitchenAI to collect anonymous usage analytics to improve the service.",
+    "dataRetentionPolicy": "Data retention policy: household data is retained for 24 months of inactivity, after which it is permanently deleted."
   },
   "notifications": {
     "title": "Notifications",
@@ -193,6 +196,8 @@
   },
   "cookie": {
     "message": "We use cookies to improve your experience. By using KitchenAI you agree to our cookie policy.",
-    "accept": "Accept All"
+    "bannerLabel": "Cookie consent",
+    "accept": "Accept All",
+    "decline": "Decline"
   }
 }
