@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
+import { useSearchParams } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { formatDate } from '../utils/dateFormat';
 import {
@@ -71,9 +72,12 @@ export default function InventoryPage() {
   const { t, i18n } = useTranslation();
   const { householdId } = useAuth();
   const queryClient = useQueryClient();
+  const [searchParams] = useSearchParams();
 
   const [locationFilter, setLocationFilter]         = useState('');
-  const [expiringSoonFilter, setExpiringSoonFilter] = useState(false);
+  const [expiringSoonFilter, setExpiringSoonFilter] = useState(
+    searchParams.get('expiringSoon') === 'true',
+  );
   const [showModal, setShowModal]                   = useState(false);
   const [editingItem, setEditingItem]               = useState<InventoryItem | null>(null);
   const [form, setForm]                             = useState<ItemFormData>(DEFAULT_FORM);

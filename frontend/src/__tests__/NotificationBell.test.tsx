@@ -31,6 +31,12 @@ jest.mock('../services/notifications', () => ({
   markAllRead:      jest.fn(() => Promise.resolve()),
 }));
 
+const mockNavigate = jest.fn();
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useNavigate: () => mockNavigate,
+}));
+
 function renderBell() {
   const qc = new QueryClient({ defaultOptions: { queries: { retry: false } } });
   return render(
@@ -43,6 +49,8 @@ function renderBell() {
 }
 
 describe('NotificationBell', () => {
+  beforeEach(() => { mockNavigate.mockReset(); });
+
   it('badge shows unread count (2 out of 3 notifications are unread)', async () => {
     renderBell();
     // Wait for the badge to show "2"
@@ -66,6 +74,21 @@ describe('NotificationBell', () => {
       expect(screen.getByText('Recipe generated')).toBeInTheDocument();
       expect(screen.getByText('Already read item')).toBeInTheDocument();
     });
+  });
+
+  it('clicking a notification navigates to inventory with expiringSoon filter', async () => {
+    const user = userEvent.setup();
+    renderBell();
+
+    // Wait for badge and open the panel
+    await screen.findByText('2');
+    await user.click(screen.getByRole('button', { name: /notifications/i }));
+
+    // Wait for notifications to appear and click the first one
+    const notifButton = await screen.findByText('Milk expires in 2 days');
+    await user.click(notifButton);
+
+    expect(mockNavigate).toHaveBeenCalledWith('/inventory?expiringSoon=true');
   });
 });
 
