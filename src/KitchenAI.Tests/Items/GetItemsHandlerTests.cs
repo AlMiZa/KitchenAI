@@ -14,6 +14,44 @@ public class GetItemsHandlerTests
             .Options);
 
     [Fact]
+    public async Task ItemsQuery_ReturnsOnlyItemsBelongingToRequestedHousehold()
+    {
+        await using var db = CreateDb();
+        var householdA = Guid.NewGuid();
+        var householdB = Guid.NewGuid();
+        var now = DateTime.UtcNow;
+
+        db.Items.AddRange(
+            new Item
+            {
+                Id = Guid.NewGuid(),
+                HouseholdId = householdA,
+                Name = "Milk",
+                Quantity = 1,
+                Unit = "L",
+                CreatedAt = now,
+                UpdatedAt = now
+            },
+            new Item
+            {
+                Id = Guid.NewGuid(),
+                HouseholdId = householdB,
+                Name = "Eggs",
+                Quantity = 12,
+                Unit = "pcs",
+                CreatedAt = now,
+                UpdatedAt = now
+            });
+        await db.SaveChangesAsync();
+
+        var handler = new GetItemsHandler(db);
+        var result = await handler.Handle(new GetItemsQuery(householdA, null, null), CancellationToken.None);
+
+        Assert.Single(result);
+        Assert.Equal("Milk", result[0].Name);
+    }
+
+    [Fact]
     public async Task ExpiringSoonFilter_ReturnsSortedByExpiryAscending()
     {
         // Arrange
