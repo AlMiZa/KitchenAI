@@ -120,6 +120,19 @@ export default function RecipesPage() {
         </button>
       </div>
 
+      {/* Generate error with retry */}
+      {generateMut.isError && (
+        <div className="mb-4 flex items-center gap-3 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+          <span>{t('recipes.generateError')}</span>
+          <button
+            onClick={() => generateMut.mutate()}
+            className="ml-auto font-medium underline hover:no-underline"
+          >
+            {t('common.retry')}
+          </button>
+        </div>
+      )}
+
       {/* Skeleton loading */}
       {isLoading && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
