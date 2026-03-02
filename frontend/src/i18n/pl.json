@@ -61,7 +61,10 @@
     "generateRecipes": "Generuj przepisy z lodówki",
     "expiringItems": "Produkty wkrótce wygasające",
     "noExpiringItems": "Brak produktów wygasających 🎉",
-    "householdSelector": "Wybór gospodarstwa"
+    "householdSelector": "Wybór gospodarstwa",
+    "analyticsError": "Nie można załadować danych analitycznych.",
+    "quickAddPlaceholder": "Nazwa produktu…",
+    "quickAddButton": "Dodaj produkt"
   },
   "inventory": {
     "addItem": "Dodaj produkt",
