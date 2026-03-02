@@ -27,6 +27,8 @@ const config: Config = {
     '**/*.test.{ts,tsx}',
     '**/*.spec.{ts,tsx}',
   ],
+  // Exclude Playwright E2E tests from Jest
+  testPathIgnorePatterns: ['/node_modules/', '<rootDir>/e2e/'],
 };
 
 export default config;
