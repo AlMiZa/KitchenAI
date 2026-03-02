@@ -41,13 +41,49 @@ public class CreateItemHandlerTests
         Assert.Equal("Milk", result.Name);
         Assert.Equal(2, result.Quantity);
         Assert.Equal("L", result.Unit);
+        Assert.True(result.AllowFraction);
+        Assert.Equal(command.PurchaseDate, result.PurchaseDate);
+        Assert.Equal(command.ExpiryDate, result.ExpiryDate);
+        Assert.Equal(BestByOrUseBy.UseBy, result.BestByOrUseBy);
         Assert.Equal(StorageLocation.Fridge, result.StorageLocation);
+        Assert.Equal("FreshFarm", result.Brand);
         Assert.Equal(3.50m, result.Price);
+        Assert.Equal("Organic", result.Notes);
         Assert.False(result.IsArchived);
 
         var saved = await db.Items.FindAsync(result.Id);
         Assert.NotNull(saved);
         Assert.Equal("Milk", saved.Name);
+    }
+
+    [Fact]
+    public async Task FractionalQuantity_StoredWithoutRounding()
+    {
+        // Arrange
+        await using var db = CreateDb();
+        var handler = new CreateItemHandler(db);
+        var command = new CreateItemCommand(
+            HouseholdId: Guid.NewGuid(),
+            Name: "Flour",
+            Quantity: 0.5m,
+            Unit: "kg",
+            AllowFraction: true,
+            PurchaseDate: null,
+            ExpiryDate: null,
+            BestByOrUseBy: null,
+            StorageLocation: StorageLocation.Pantry,
+            Brand: null,
+            Price: 1.20m,
+            Notes: null);
+
+        // Act
+        var result = await handler.Handle(command, CancellationToken.None);
+
+        // Assert
+        Assert.Equal(0.5m, result.Quantity);
+        var saved = await db.Items.FindAsync(result.Id);
+        Assert.NotNull(saved);
+        Assert.Equal(0.5m, saved.Quantity);
     }
 
     [Fact]
