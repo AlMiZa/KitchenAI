@@ -95,5 +95,39 @@ describe('RecipeView', () => {
       ).toBeInTheDocument();
     });
   });
+
+  it('shows success indicator for available ingredients after check', async () => {
+    const user = userEvent.setup();
+    renderDetail();
+
+    await screen.findByText('Test Omelette');
+
+    await user.click(
+      screen.getByRole('button', { name: /check against my inventory/i }),
+    );
+
+    // 'Eggs' is 'available' in checkResultWithMissing — expect the ✓ icon
+    await waitFor(() => {
+      const icons = document.querySelectorAll('.text-green-600');
+      expect(icons.length).toBeGreaterThan(0);
+    });
+  });
+
+  it('shows missing indicator for missing ingredients after check', async () => {
+    const user = userEvent.setup();
+    renderDetail();
+
+    await screen.findByText('Test Omelette');
+
+    await user.click(
+      screen.getByRole('button', { name: /check against my inventory/i }),
+    );
+
+    // 'Cheese' is 'missing' in checkResultWithMissing — expect the ✗ icon in red
+    await waitFor(() => {
+      const icons = document.querySelectorAll('.text-red-500');
+      expect(icons.length).toBeGreaterThan(0);
+    });
+  });
 });
 
