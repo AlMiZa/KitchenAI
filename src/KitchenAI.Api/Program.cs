@@ -1,10 +1,13 @@
+using System.Globalization;
 using System.Text;
+using KitchenAI.Api.Localization;
 using KitchenAI.Application;
 using KitchenAI.Application.Exceptions;
 using KitchenAI.Infrastructure;
 using KitchenAI.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -14,6 +17,9 @@ var builder = WebApplication.CreateBuilder(args);
 // ── Application & Infrastructure ────────────────────────────────────────────
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
+
+// ── Localization ─────────────────────────────────────────────────────────────
+builder.Services.AddLocalization();
 
 // ── Controllers ─────────────────────────────────────────────────────────────
 builder.Services.AddControllers()
@@ -111,6 +117,20 @@ app.UseExceptionHandler(errorApp =>
 
         await context.Response.WriteAsJsonAsync(new { error = ex?.Message ?? "An unexpected error occurred." });
     });
+});
+
+// ── Request localization (locale from JWT claim → Accept-Language → pl-PL default)
+var supportedCultures = new[] { new CultureInfo("pl-PL"), new CultureInfo("en") };
+app.UseRequestLocalization(new RequestLocalizationOptions
+{
+    DefaultRequestCulture = new RequestCulture("pl-PL"),
+    SupportedCultures = supportedCultures,
+    SupportedUICultures = supportedCultures,
+    RequestCultureProviders =
+    [
+        new UserLocaleRequestCultureProvider(),
+        new AcceptLanguageHeaderRequestCultureProvider()
+    ]
 });
 
 app.UseSwagger();

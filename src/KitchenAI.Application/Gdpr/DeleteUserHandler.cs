@@ -1,4 +1,5 @@
 using KitchenAI.Application.Persistence;
+using KitchenAI.Application.Resources;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -12,7 +13,7 @@ public class DeleteUserHandler(IAppDbContext db, ILogger<DeleteUserHandler> logg
     public async Task Handle(DeleteUserCommand request, CancellationToken cancellationToken)
     {
         var user = await db.Users.FindAsync([request.UserId], cancellationToken)
-            ?? throw new KeyNotFoundException($"User {request.UserId} not found.");
+            ?? throw new KeyNotFoundException(Messages.Get("User_NotFound", request.UserId));
 
         logger.LogWarning("Account deletion initiated for user {UserId}.", request.UserId);
 

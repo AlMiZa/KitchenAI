@@ -1,4 +1,5 @@
 using KitchenAI.Application.Persistence;
+using KitchenAI.Application.Resources;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,7 +12,7 @@ public class GetCurrentUserHandler(IAppDbContext db) : IRequestHandler<GetCurren
     public async Task<UserDto> Handle(GetCurrentUserQuery request, CancellationToken cancellationToken)
     {
         var user = await db.Users.FindAsync([request.UserId], cancellationToken)
-            ?? throw new UnauthorizedAccessException("User not found.");
+            ?? throw new UnauthorizedAccessException(Messages.Get("Auth_UserNotFound"));
 
         var householdId = await db.Households
             .Where(h => h.OwnerUserId == user.Id)

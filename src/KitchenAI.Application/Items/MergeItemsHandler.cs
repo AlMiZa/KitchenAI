@@ -1,4 +1,5 @@
 using KitchenAI.Application.Persistence;
+using KitchenAI.Application.Resources;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,7 +12,7 @@ public class MergeItemsHandler(IAppDbContext db) : IRequestHandler<MergeItemsCom
     public async Task<ItemDto> Handle(MergeItemsCommand request, CancellationToken cancellationToken)
     {
         if (request.ItemIds.Count < 2)
-            throw new ArgumentException("At least two items are required to merge.");
+            throw new ArgumentException(Messages.Get("Items_MergeRequiresTwo"));
 
         var items = await db.Items
             .Where(i => request.ItemIds.Contains(i.Id) && i.HouseholdId == request.HouseholdId && !i.IsArchived)
@@ -19,7 +20,7 @@ public class MergeItemsHandler(IAppDbContext db) : IRequestHandler<MergeItemsCom
             .ToListAsync(cancellationToken);
 
         if (items.Count < 2)
-            throw new KeyNotFoundException("Could not find at least two matching items to merge.");
+            throw new KeyNotFoundException(Messages.Get("Items_MergeNotEnough"));
 
         var primary = items[0];
         primary.Quantity = items.Sum(i => i.Quantity);

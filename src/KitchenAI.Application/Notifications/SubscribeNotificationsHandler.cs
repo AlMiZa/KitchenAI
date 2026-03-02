@@ -1,5 +1,6 @@
 using System.Text.Json;
 using KitchenAI.Application.Persistence;
+using KitchenAI.Application.Resources;
 using MediatR;
 
 namespace KitchenAI.Application.Notifications;
@@ -14,7 +15,7 @@ public class SubscribeNotificationsHandler(IAppDbContext db)
     public async Task Handle(SubscribeNotificationsCommand request, CancellationToken cancellationToken)
     {
         var user = await db.Users.FindAsync([request.UserId], cancellationToken)
-            ?? throw new KeyNotFoundException($"User {request.UserId} not found.");
+            ?? throw new KeyNotFoundException(Messages.Get("User_NotFound", request.UserId));
 
         user.NotificationPreferences = JsonSerializer.Serialize(
             new NotificationPrefs(request.EmailEnabled, request.PushEnabled, request.ExpiryThresholdDays));

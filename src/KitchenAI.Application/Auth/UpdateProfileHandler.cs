@@ -1,4 +1,5 @@
 using KitchenAI.Application.Persistence;
+using KitchenAI.Application.Resources;
 using MediatR;
 
 namespace KitchenAI.Application.Auth;
@@ -10,7 +11,7 @@ public class UpdateProfileHandler(IAppDbContext db) : IRequestHandler<UpdateProf
     public async Task<UserDto> Handle(UpdateProfileCommand request, CancellationToken cancellationToken)
     {
         var user = await db.Users.FindAsync([request.UserId], cancellationToken)
-            ?? throw new UnauthorizedAccessException("User not found.");
+            ?? throw new UnauthorizedAccessException(Messages.Get("Auth_UserNotFound"));
 
         if (request.DisplayName is not null)
         {

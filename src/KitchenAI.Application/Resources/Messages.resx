@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+
+  <!-- Auth -->
+  <data name="Auth_EmailAlreadyInUse" xml:space="preserve">
+    <value>Email jest już w użyciu</value>
+  </data>
+  <data name="Auth_InvalidCredentials" xml:space="preserve">
+    <value>Nieprawidłowe dane logowania.</value>
+  </data>
+  <data name="Auth_UserNotFound" xml:space="preserve">
+    <value>Użytkownik nie znaleziony.</value>
+  </data>
+
+  <!-- Items -->
+  <data name="Item_NotFound" xml:space="preserve">
+    <value>Produkt {0} nie znaleziony.</value>
+  </data>
+  <data name="Items_MergeRequiresTwo" xml:space="preserve">
+    <value>Do scalenia wymagane są co najmniej dwa produkty.</value>
+  </data>
+  <data name="Items_MergeNotEnough" xml:space="preserve">
+    <value>Nie znaleziono co najmniej dwóch pasujących produktów do scalenia.</value>
+  </data>
+
+  <!-- Recipes -->
+  <data name="Recipe_NotFound" xml:space="preserve">
+    <value>Przepis {0} nie znaleziony.</value>
+  </data>
+  <data name="Recipe_RateLimitExceeded" xml:space="preserve">
+    <value>Przekroczono limit generowania przepisów dla gospodarstwa {0}.</value>
+  </data>
+  <data name="Recipe_LlmOutputInvalid" xml:space="preserve">
+    <value>Wyjście LLM jest nieprawidłowe, a adapter zwrócił mniej niż 2 przepisy zastępcze.</value>
+  </data>
+  <data name="Recipe_TooFewGenerated" xml:space="preserve">
+    <value>Generowanie przepisów zwróciło mniej niż 2 przepisy.</value>
+  </data>
+
+  <!-- Households -->
+  <data name="Household_NotFound" xml:space="preserve">
+    <value>Gospodarstwo {0} nie znaleziono.</value>
+  </data>
+
+  <!-- Users -->
+  <data name="User_NotFound" xml:space="preserve">
+    <value>Użytkownik {0} nie znaleziony.</value>
+  </data>
+
+  <!-- Notifications -->
+  <data name="Notification_Test" xml:space="preserve">
+    <value>To jest testowe powiadomienie.</value>
+  </data>
+
+  <!-- Unit labels -->
+  <data name="Unit_g" xml:space="preserve">
+    <value>g</value>
+  </data>
+  <data name="Unit_kg" xml:space="preserve">
+    <value>kg</value>
+  </data>
+  <data name="Unit_ml" xml:space="preserve">
+    <value>ml</value>
+  </data>
+  <data name="Unit_L" xml:space="preserve">
+    <value>L</value>
+  </data>
+  <data name="Unit_pcs" xml:space="preserve">
+    <value>szt</value>
+  </data>
+</root>

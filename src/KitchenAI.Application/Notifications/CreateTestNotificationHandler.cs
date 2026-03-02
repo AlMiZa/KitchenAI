@@ -1,4 +1,5 @@
 using KitchenAI.Application.Persistence;
+using KitchenAI.Application.Resources;
 using KitchenAI.Domain.Entities;
 using KitchenAI.Domain.Enums;
 using MediatR;
@@ -16,7 +17,7 @@ public class CreateTestNotificationHandler(IAppDbContext db) : IRequestHandler<C
             Id = Guid.NewGuid(),
             HouseholdId = request.HouseholdId,
             Type = NotificationType.RecipeSuggestion,
-            Payload = """{"message":"This is a test notification."}""",
+            Payload = System.Text.Json.JsonSerializer.Serialize(new { message = Messages.Get("Notification_Test") }),
             Delivered = false,
             CreatedAt = DateTime.UtcNow
         };

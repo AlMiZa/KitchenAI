@@ -1,5 +1,6 @@
 using System.Text.Json;
 using KitchenAI.Application.Persistence;
+using KitchenAI.Application.Resources;
 using KitchenAI.Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -16,7 +17,7 @@ public class CookRecipeHandler(IAppDbContext db) : IRequestHandler<CookRecipeCom
             .FirstOrDefaultAsync(
                 r => r.Id == request.RecipeId && r.HouseholdId == request.HouseholdId,
                 cancellationToken)
-            ?? throw new KeyNotFoundException($"Recipe {request.RecipeId} not found.");
+            ?? throw new KeyNotFoundException(Messages.Get("Recipe_NotFound", request.RecipeId));
 
         db.AnalyticsEvents.Add(new AnalyticsEvent
         {

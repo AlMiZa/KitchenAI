@@ -30,6 +30,7 @@ public class TokenService(IConfiguration configuration) : ITokenService
             new(JwtRegisteredClaimNames.Email, user.Email),
             new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             new("householdId", householdId.ToString()),
+            new("locale", user.Locale),
             new(ClaimTypes.NameIdentifier, user.Id.ToString()),
             new(ClaimTypes.Email, user.Email),
             new(ClaimTypes.Role, user.Role)

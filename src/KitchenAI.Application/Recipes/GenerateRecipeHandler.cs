@@ -1,6 +1,7 @@
 using System.Text.Json;
 using KitchenAI.Application.Exceptions;
 using KitchenAI.Application.Persistence;
+using KitchenAI.Application.Resources;
 using KitchenAI.Application.Services;
 using KitchenAI.Domain.Entities;
 using MediatR;
@@ -25,7 +26,7 @@ public class GenerateRecipeHandler(
     {
         // Rate-limit per household
         if (!rateLimiter.TryConsume(request.HouseholdId))
-            throw new RateLimitExceededException($"Recipe generation quota exceeded for household {request.HouseholdId}.");
+            throw new RateLimitExceededException(Messages.Get("Recipe_RateLimitExceeded", request.HouseholdId));
 
         // Load non-archived, non-zero-quantity items
         var items = await db.Items
@@ -59,11 +60,11 @@ public class GenerateRecipeHandler(
             ? llmRecipes
             : candidateRecipes.Count >= 2
                 ? candidateRecipes
-                : throw new InvalidOperationException("LLM output invalid and adapter returned fewer than 2 fallback recipes.");
+                : throw new InvalidOperationException(Messages.Get("Recipe_LlmOutputInvalid"));
 
         // Ensure at least 2 distinct recipes
         if (recipes.Count < 2)
-            throw new InvalidOperationException("Recipe generation returned fewer than 2 recipes.");
+            throw new InvalidOperationException(Messages.Get("Recipe_TooFewGenerated"));
 
         var llmResponseJson = JsonSerializer.Serialize(llmRecipes);
 

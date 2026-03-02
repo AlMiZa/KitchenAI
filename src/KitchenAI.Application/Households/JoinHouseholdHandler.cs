@@ -1,4 +1,5 @@
 using KitchenAI.Application.Persistence;
+using KitchenAI.Application.Resources;
 using KitchenAI.Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -14,7 +15,7 @@ public class JoinHouseholdHandler(IAppDbContext db) : IRequestHandler<JoinHouseh
         var household = await db.Households
             .Include(h => h.Members)
             .FirstOrDefaultAsync(h => h.Id == request.HouseholdId, cancellationToken)
-            ?? throw new KeyNotFoundException($"Household {request.HouseholdId} not found.");
+            ?? throw new KeyNotFoundException(Messages.Get("Household_NotFound", request.HouseholdId));
 
         var alreadyMember = household.Members.Any(m => m.UserId == request.UserId);
         if (!alreadyMember)
