@@ -94,4 +94,51 @@ public class CheckRecipeAvailabilityHandlerTests
         var butter = Assert.Single(result.Items, i => i.Name == "Butter");
         Assert.Equal(200, butter.Deficit);
     }
+
+    [Fact]
+    public async Task IngredientEntirelyAbsent_ReturnsMissingWithFullDeficit()
+    {
+        // Arrange: recipe requires Sugar but inventory has no Sugar at all
+        var db = CreateDb();
+        var householdId = Guid.NewGuid();
+        var recipeId = Guid.NewGuid();
+        var now = DateTime.UtcNow;
+
+        var recipe = new Recipe
+        {
+            Id = recipeId,
+            HouseholdId = householdId,
+            Title = "Test Recipe",
+            Source = RecipeSource.Generated,
+            Servings = 2,
+            PrepTime = 5,
+            CookTime = 10,
+            CreatedAt = now,
+            UpdatedAt = now
+        };
+        db.Recipes.Add(recipe);
+        db.RecipeIngredients.Add(new RecipeIngredient
+        {
+            Id = Guid.NewGuid(),
+            RecipeId = recipeId,
+            Name = "Sugar",
+            Quantity = 150,
+            Unit = "g"
+        });
+        await db.SaveChangesAsync();
+
+        await using var _ = db;
+        var handler = new CheckRecipeAvailabilityHandler(db);
+
+        // Act
+        var result = await handler.Handle(
+            new CheckRecipeAvailabilityQuery(householdId, recipeId), CancellationToken.None);
+
+        // Assert
+        Assert.Equal("missing", result.Status);
+        Assert.NotNull(result.Items);
+        var sugar = Assert.Single(result.Items, i => i.Name == "Sugar");
+        Assert.Equal(0, sugar.Available);
+        Assert.Equal(150, sugar.Deficit);
+    }
 }
