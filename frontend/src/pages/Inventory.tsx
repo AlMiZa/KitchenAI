@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../hooks/useAuth';
+import { formatDate } from '../utils/dateFormat';
 import {
   getItems,
   createItem,
@@ -48,25 +49,26 @@ function daysUntilExpiry(dateStr: string): number {
 }
 
 function ExpiryBadge({ expiryDate }: { expiryDate?: string }) {
+  const { t } = useTranslation();
   if (!expiryDate) return null;
   const days = daysUntilExpiry(expiryDate);
   if (days < 0)
     return (
       <span className="px-2 py-0.5 bg-red-100 text-red-700 rounded text-xs font-medium">
-        Expired
+        {t('inventory.expired')}
       </span>
     );
   if (days <= 3)
     return (
       <span className="px-2 py-0.5 bg-amber-100 text-amber-700 rounded text-xs font-medium">
-        {days === 0 ? 'Today' : `${days}d`}
+        {days === 0 ? t('inventory.expiresToday') : t('inventory.expiresInDays', { days })}
       </span>
     );
   return null;
 }
 
 export default function InventoryPage() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { householdId } = useAuth();
   const queryClient = useQueryClient();
 
@@ -239,7 +241,7 @@ export default function InventoryPage() {
                 <th className="text-left px-4 py-3 text-gray-500 font-medium">{t('inventory.quantity')}</th>
                 <th className="text-left px-4 py-3 text-gray-500 font-medium">{t('inventory.expiryDate')}</th>
                 <th className="text-left px-4 py-3 text-gray-500 font-medium">{t('inventory.location')}</th>
-                <th className="text-left px-4 py-3 text-gray-500 font-medium">Status</th>
+                <th className="text-left px-4 py-3 text-gray-500 font-medium">{t('inventory.status')}</th>
                 <th className="text-right px-4 py-3 text-gray-500 font-medium">{t('common.edit')}</th>
               </tr>
             </thead>
@@ -247,9 +249,9 @@ export default function InventoryPage() {
               {displayed.map((item) => (
                 <tr key={item.id} className="hover:bg-gray-50 transition-colors">
                   <td className="px-4 py-3 font-medium text-gray-800">{item.name}</td>
-                  <td className="px-4 py-3 text-gray-600">{item.quantity} {item.unit}</td>
+                  <td className="px-4 py-3 text-gray-600">{item.quantity} {t('inventory.units.' + item.unit)}</td>
                   <td className="px-4 py-3 text-gray-600">
-                    {item.expiryDate ? new Date(item.expiryDate).toLocaleDateString() : '—'}
+                    {item.expiryDate ? formatDate(item.expiryDate, i18n.language) : '—'}
                   </td>
                   <td className="px-4 py-3 text-gray-600 capitalize">{item.storageLocation ?? '—'}</td>
                   <td className="px-4 py-3">
@@ -340,11 +342,11 @@ export default function InventoryPage() {
                     onChange={(e) => setForm({ ...form, unit: e.target.value as ItemUnit })}
                     className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
                   >
-                    <option value="g">g</option>
-                    <option value="kg">kg</option>
-                    <option value="ml">ml</option>
-                    <option value="L">L</option>
-                    <option value="pcs">pcs</option>
+                    <option value="g">{t('inventory.units.g')}</option>
+                    <option value="kg">{t('inventory.units.kg')}</option>
+                    <option value="ml">{t('inventory.units.ml')}</option>
+                    <option value="L">{t('inventory.units.L')}</option>
+                    <option value="pcs">{t('inventory.units.pcs')}</option>
                   </select>
                 </div>
               </div>
