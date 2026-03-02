@@ -36,6 +36,8 @@ public static class InfrastructureServiceExtensions
         services.AddSingleton<IGenerationRateLimiter, InMemoryGenerationRateLimiter>();
         services.AddScoped<ExpiryNotificationJob>();
         services.AddHostedService<ExpiryNotificationService>();
+        services.AddScoped<InactiveHouseholdRetentionJob>();
+        services.AddHostedService<InactiveHouseholdRetentionService>();
 
         services.Configure<GenerationRateLimitOptions>(
             configuration.GetSection(GenerationRateLimitOptions.SectionName));

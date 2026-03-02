@@ -3,11 +3,12 @@ using KitchenAI.Application.Persistence;
 using KitchenAI.Application.Services;
 using KitchenAI.Domain.Entities;
 using MediatR;
+using Microsoft.Extensions.Logging;
 
 namespace KitchenAI.Application.Auth;
 
 /// <summary>Generates a short-lived magic-link token, persists it, and emails it to the user.</summary>
-public class PasswordlessRequestHandler(IAppDbContext db, IEmailService emailService)
+public class PasswordlessRequestHandler(IAppDbContext db, IEmailService emailService, ILogger<PasswordlessRequestHandler> logger)
     : IRequestHandler<PasswordlessRequestCommand>
 {
     /// <inheritdoc/>
@@ -29,6 +30,8 @@ public class PasswordlessRequestHandler(IAppDbContext db, IEmailService emailSer
 
         db.MagicLinkTokens.Add(magicLink);
         await db.SaveChangesAsync(cancellationToken);
+
+        logger.LogInformation("Magic link token created for email {Email}.", request.Email);
 
         await emailService.SendMagicLinkAsync(request.Email, rawToken, cancellationToken);
     }
