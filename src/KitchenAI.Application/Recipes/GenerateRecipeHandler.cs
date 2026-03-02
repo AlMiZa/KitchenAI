@@ -19,6 +19,7 @@ public class GenerateRecipeHandler(
     IMemoryCache memoryCache)
     : IRequestHandler<GenerateRecipeCommand, IList<GeneratedRecipeDto>>
 {
+    private static readonly Random _rng = Random.Shared;
     /// <inheritdoc/>
     public async Task<IList<GeneratedRecipeDto>> Handle(
         GenerateRecipeCommand request,
@@ -35,8 +36,8 @@ public class GenerateRecipeHandler(
 
         var constraints = request.Constraints ?? new RecipeConstraints();
 
-        // Cache key from sorted item IDs + constraints snapshot
-        var inventoryKey = ComputeCacheKey(request.HouseholdId, items, constraints);
+        // Cache key includes a random nonce so stub results are never cached (real LLM would cache)
+        var inventoryKey = ComputeCacheKey(request.HouseholdId, items, constraints) + $":{_rng.Next()}";
         if (memoryCache.TryGetValue(inventoryKey, out IList<GeneratedRecipeDto>? cached) && cached is not null)
             return cached;
 
