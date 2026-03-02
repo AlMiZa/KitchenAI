@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useAuth } from '../hooks/useAuth';
 import { getAnalytics } from '../services/analytics';
 import { getItems } from '../services/items';
+import HouseholdSelector from '../components/HouseholdSelector';
 import LanguageSwitcher from '../components/LanguageSwitcher';
 import { formatDate } from '../utils/dateFormat';
 
@@ -57,7 +58,10 @@ export default function DashboardPage() {
     <div>
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-semibold text-gray-800">{t('pages.dashboard')}</h1>
+        <div className="flex items-center gap-3">
+          <h1 className="text-2xl font-semibold text-gray-800">{t('pages.dashboard')}</h1>
+          <HouseholdSelector />
+        </div>
         <LanguageSwitcher />
       </div>
 

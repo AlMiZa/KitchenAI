@@ -60,7 +60,8 @@
     "topIngredients": "Najczęstsze składniki",
     "generateRecipes": "Generuj przepisy z lodówki",
     "expiringItems": "Produkty wkrótce wygasające",
-    "noExpiringItems": "Brak produktów wygasających 🎉"
+    "noExpiringItems": "Brak produktów wygasających 🎉",
+    "householdSelector": "Wybór gospodarstwa"
   },
   "inventory": {
     "addItem": "Dodaj produkt",
@@ -148,12 +149,23 @@
     "saveNotifications": "Zapisz powiadomienia",
     "householdName": "Gospodarstwo",
     "memberCount": "Członkowie",
-    "inviteMember": "Zaproś członka (wkrótce)",
+    "inviteMember": "Zaproś członka",
     "exportData": "Eksportuj moje dane",
     "deleteAccount": "Usuń konto",
     "deleteConfirm": "Czy na pewno? Tej operacji nie można cofnąć.",
     "profileSaved": "Profil zapisany pomyślnie",
-    "notificationsSaved": "Ustawienia powiadomień zapisane"
+    "notificationsSaved": "Ustawienia powiadomień zapisane",
+    "members": "Członkowie",
+    "noMembers": "Nie znaleziono członków.",
+    "inviteLink": "Udostępnij link z zaproszeniem:",
+    "copyLink": "Kopiuj",
+    "inviteLinkError": "Nie można załadować linku zaproszenia.",
+    "leaveHousehold": "Opuść gospodarstwo",
+    "leaveConfirm": "Czy na pewno chcesz opuścić to gospodarstwo?",
+    "role": {
+      "owner": "Właściciel",
+      "member": "Członek"
+    }
   },
   "notifications": {
     "title": "Powiadomienia",

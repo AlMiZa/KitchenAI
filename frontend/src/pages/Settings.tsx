@@ -1,9 +1,10 @@
 import { useState } from 'react';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../hooks/useAuth';
 import { updateProfile, exportData, deleteAccount } from '../services/auth';
 import { subscribeNotifications } from '../services/notifications';
+import { getHousehold, getHouseholdMembers, getInviteLink, leaveHousehold } from '../services/households';
 
 type Tab = 'profile' | 'notifications' | 'household' | 'privacy';
 
@@ -25,6 +26,12 @@ export default function SettingsPage() {
 
   // --- Privacy state ---
   const [deleteConfirm, setDeleteConfirm] = useState(false);
+
+  // --- Household state ---
+  const [showInvite, setShowInvite] = useState(false);
+  const [leaveConfirm, setLeaveConfirm] = useState(false);
+
+  const queryClient = useQueryClient();
 
   const profileMut = useMutation({
     mutationFn: () => updateProfile({ displayName, locale }),
@@ -61,6 +68,36 @@ export default function SettingsPage() {
   const deleteMut = useMutation({
     mutationFn: deleteAccount,
     onSuccess: logout,
+  });
+
+  // --- Household queries ---
+  const { data: householdData } = useQuery({
+    queryKey: ['household', householdId],
+    queryFn: () => getHousehold(householdId!),
+    enabled: !!householdId,
+  });
+
+  const { data: members = [], isLoading: membersLoading } = useQuery({
+    queryKey: ['household-members', householdId],
+    queryFn: () => getHouseholdMembers(householdId!),
+    enabled: !!householdId,
+  });
+
+  const { data: inviteLinkData, isLoading: inviteLinkLoading } = useQuery({
+    queryKey: ['household-invite', householdId],
+    queryFn: () => getInviteLink(householdId!),
+    enabled: !!householdId && showInvite,
+  });
+  const inviteLink = inviteLinkData?.inviteLink;
+
+  const currentUserRole = members.find((m) => m.userId === user?.id)?.role;
+
+  const leaveMut = useMutation({
+    mutationFn: () => leaveHousehold(householdId!),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: ['households'] });
+      logout();
+    },
   });
 
   const tabs: { id: Tab; label: string }[] = [
@@ -201,17 +238,116 @@ export default function SettingsPage() {
 
         {/* Household tab */}
         {activeTab === 'household' && (
-          <section role="tabpanel" id="panel-household" aria-labelledby="tab-household" className="space-y-4">
+          <section role="tabpanel" id="panel-household" aria-labelledby="tab-household" className="space-y-6">
+            {/* Household name */}
             <div>
               <p className="text-sm text-gray-500 mb-1">{t('settings.householdName')}</p>
-              <p className="text-gray-800 font-medium">{householdId ?? '—'}</p>
+              <p className="text-gray-800 font-medium">{householdData?.name ?? householdId ?? '—'}</p>
             </div>
-            <button
-              disabled
-              className="bg-gray-100 text-gray-400 px-5 py-2 rounded-lg text-sm font-medium cursor-not-allowed"
-            >
-              {t('settings.inviteMember')}
-            </button>
+
+            {/* Member list */}
+            <div>
+              <h3 className="text-sm font-semibold text-gray-700 mb-3">{t('settings.members')}</h3>
+              {membersLoading ? (
+                <div className="animate-pulse space-y-2">
+                  {[1, 2].map((i) => <div key={i} className="h-8 bg-gray-100 rounded" />)}
+                </div>
+              ) : members.length === 0 ? (
+                <p className="text-sm text-gray-400">{t('settings.noMembers')}</p>
+              ) : (
+                <ul className="divide-y divide-gray-100">
+                  {members.map((m) => (
+                    <li key={m.userId} className="py-2.5 flex items-center justify-between">
+                      <div>
+                        <p className="text-sm font-medium text-gray-800">{m.displayName}</p>
+                        <p className="text-xs text-gray-500">{m.email}</p>
+                      </div>
+                      <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${
+                        m.role === 'owner'
+                          ? 'bg-green-100 text-green-700'
+                          : 'bg-gray-100 text-gray-600'
+                      }`}>
+                        {t(`settings.role.${m.role}`)}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+
+            {/* Invite member */}
+            <div>
+              <button
+                onClick={() => setShowInvite(true)}
+                className="bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-lg text-sm font-medium"
+              >
+                {t('settings.inviteMember')}
+              </button>
+
+              {showInvite && (
+                <div className="mt-4 p-4 bg-gray-50 rounded-xl border border-gray-200 space-y-3">
+                  <p className="text-sm font-medium text-gray-700">{t('settings.inviteLink')}</p>
+                  {inviteLinkLoading ? (
+                    <p className="text-sm text-gray-400">{t('common.loading')}</p>
+                  ) : inviteLink ? (
+                    <div className="flex items-center gap-2">
+                      <input
+                        readOnly
+                        value={inviteLink}
+                        className="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white text-gray-700"
+                      />
+                      <button
+                        onClick={() => { void navigator.clipboard.writeText(inviteLink); }}
+                        className="border border-gray-300 px-3 py-2 rounded-lg text-sm hover:bg-gray-100"
+                      >
+                        {t('settings.copyLink')}
+                      </button>
+                    </div>
+                  ) : (
+                    <p className="text-sm text-red-500">{t('settings.inviteLinkError')}</p>
+                  )}
+                  <button
+                    onClick={() => setShowInvite(false)}
+                    className="text-sm text-gray-500 hover:text-gray-700"
+                  >
+                    {t('common.close')}
+                  </button>
+                </div>
+              )}
+            </div>
+
+            {/* Leave household (non-owners only) */}
+            {currentUserRole !== 'owner' && currentUserRole !== undefined && (
+              <div className="border-t border-gray-200 pt-4">
+                {!leaveConfirm ? (
+                  <button
+                    onClick={() => setLeaveConfirm(true)}
+                    className="border border-red-500 text-red-600 hover:bg-red-50 px-5 py-2 rounded-lg text-sm font-medium"
+                  >
+                    {t('settings.leaveHousehold')}
+                  </button>
+                ) : (
+                  <div className="space-y-3 bg-red-50 rounded-xl p-4">
+                    <p className="text-sm text-red-700">{t('settings.leaveConfirm')}</p>
+                    <div className="flex gap-3">
+                      <button
+                        onClick={() => leaveMut.mutate()}
+                        disabled={leaveMut.isPending}
+                        className="bg-red-600 hover:bg-red-700 disabled:opacity-50 text-white px-4 py-2 rounded-lg text-sm font-medium"
+                      >
+                        {t('common.confirm')}
+                      </button>
+                      <button
+                        onClick={() => setLeaveConfirm(false)}
+                        className="border border-gray-300 px-4 py-2 rounded-lg text-sm text-gray-600 hover:bg-gray-50"
+                      >
+                        {t('common.cancel')}
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
           </section>
         )}
 
