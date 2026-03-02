@@ -6,7 +6,7 @@ public record GeneratedRecipeDto(
     string Title,
     IList<RecipeIngredientDto> Ingredients,
     IList<string> Steps,
-    string? Nutrition,
+    NutritionDto? Nutrition,
     string? Rationale,
     int PrepTime,
     int CookTime,

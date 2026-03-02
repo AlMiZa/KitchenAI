@@ -11,9 +11,9 @@ public class GetHouseholdsHandler(IAppDbContext db) : IRequestHandler<GetHouseho
     public async Task<IList<HouseholdDto>> Handle(GetHouseholdsQuery request, CancellationToken cancellationToken)
     {
         var households = await db.HouseholdMembers
+            .Include(m => m.Household).ThenInclude(h => h.Members)
             .Where(m => m.UserId == request.UserId)
             .Select(m => m.Household)
-            .Include(h => h.Members)
             .ToListAsync(cancellationToken);
 
         return households

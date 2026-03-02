@@ -7,7 +7,7 @@ public record RecipeDataDto(
     string Title,
     IList<RecipeIngredientDto> Ingredients,
     IList<string> Steps,
-    string? Nutrition,
+    NutritionDto? Nutrition,
     int Servings,
     int PrepTime,
     int CookTime,

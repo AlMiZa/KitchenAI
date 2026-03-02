@@ -49,7 +49,7 @@ public class LlmService : ILlmService
                 $"Add {secondary} and season with salt. Cook for another 3 minutes.",
                 "Serve immediately."
             ],
-            Nutrition: $"~{300 + (int)(items.Count * 5)} kcal per serving",
+            Nutrition: new NutritionDto(300 + (int)(items.Count * 5), 15, 35, 10),
             Rationale: $"Uses your {primary} and {secondary} which are available in your pantry.",
             PrepTime: 10,
             CookTime: maxTime / 2,
@@ -73,7 +73,7 @@ public class LlmService : ILlmService
                 "Simmer for 20 minutes, season with salt.",
                 "Blend if desired and serve hot."
             ],
-            Nutrition: $"~{200 + (int)(items.Count * 3)} kcal per serving",
+            Nutrition: new NutritionDto(200 + (int)(items.Count * 3), 8, 28, 5),
             Rationale: $"A warming soup made primarily from your {primary} stock.",
             PrepTime: 5,
             CookTime: maxTime,

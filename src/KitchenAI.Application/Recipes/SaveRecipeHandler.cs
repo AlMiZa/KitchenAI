@@ -21,7 +21,7 @@ public class SaveRecipeHandler(IAppDbContext db) : IRequestHandler<SaveRecipeCom
             Title = request.RecipeData.Title,
             Source = RecipeSource.Generated,
             Steps = JsonSerializer.Serialize(request.RecipeData.Steps),
-            Nutrition = request.RecipeData.Nutrition,
+            Nutrition = JsonSerializer.Serialize(request.RecipeData.Nutrition),
             Servings = request.RecipeData.Servings,
             PrepTime = request.RecipeData.PrepTime,
             CookTime = request.RecipeData.CookTime,
@@ -55,17 +55,33 @@ public class SaveRecipeHandler(IAppDbContext db) : IRequestHandler<SaveRecipeCom
         return ToDto(recipe);
     }
 
-    internal static RecipeDto ToDto(Recipe recipe) => new(
-        recipe.Id,
-        recipe.HouseholdId,
-        recipe.Title,
-        recipe.Source,
-        recipe.RecipeIngredients.Select(i => new RecipeIngredientDto(i.Id, i.Name, i.Quantity, i.Unit)).ToList(),
-        recipe.Steps,
-        recipe.Nutrition,
-        recipe.Servings,
-        recipe.PrepTime,
-        recipe.CookTime,
-        recipe.Tags,
-        recipe.CreatedAt);
+    internal static RecipeDto ToDto(Recipe recipe)
+    {
+        var steps = string.IsNullOrEmpty(recipe.Steps)
+            ? []
+            : JsonSerializer.Deserialize<IList<string>>(recipe.Steps) ?? [];
+
+        NutritionDto? nutrition = null;
+        if (!string.IsNullOrEmpty(recipe.Nutrition))
+        {
+            try { nutrition = JsonSerializer.Deserialize<NutritionDto>(recipe.Nutrition); }
+            catch { /* legacy string value — use zero fallback */ }
+        }
+
+        nutrition ??= new NutritionDto(0, 0, 0, 0);
+
+        return new RecipeDto(
+            recipe.Id,
+            recipe.HouseholdId,
+            recipe.Title,
+            recipe.Source,
+            recipe.RecipeIngredients.Select(i => new RecipeIngredientDto(i.Id, i.Name, i.Quantity, i.Unit)).ToList(),
+            steps,
+            nutrition,
+            recipe.Servings,
+            recipe.PrepTime,
+            recipe.CookTime,
+            recipe.Tags,
+            recipe.CreatedAt);
+    }
 }
