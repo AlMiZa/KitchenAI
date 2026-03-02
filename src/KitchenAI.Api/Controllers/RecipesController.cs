@@ -24,7 +24,7 @@ public class RecipesController : ApiControllerBase
     {
         ValidateHouseholdAccess(hid);
         var result = await Mediator.Send(new SaveRecipeCommand(hid, recipeData), ct);
-        return CreatedAtAction(nameof(GetRecipes), result);
+        return CreatedAtAction(nameof(GetRecipes), new { hid }, result);
     }
 
     /// <summary>Returns a single saved recipe.</summary>

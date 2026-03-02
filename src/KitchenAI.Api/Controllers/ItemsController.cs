@@ -29,7 +29,7 @@ public class ItemsController : ApiControllerBase
     {
         ValidateHouseholdAccess(hid);
         var result = await Mediator.Send(command with { HouseholdId = hid }, ct);
-        return CreatedAtAction(nameof(GetItems), result);
+        return CreatedAtAction(nameof(GetItems), new { hid }, result);
     }
 
     /// <summary>Updates an existing inventory item.</summary>

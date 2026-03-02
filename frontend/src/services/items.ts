@@ -8,11 +8,13 @@ export interface InventoryItem {
   unit: 'g' | 'kg' | 'ml' | 'L' | 'pcs';
   purchaseDate?: string;
   expiryDate?: string;
-  storageLocation?: 'fridge' | 'freezer' | 'pantry' | 'cabinet';
+  /** Matches backend StorageLocation enum (camelCase): fridge | freezer | pantry | other */
+  storageLocation?: 'fridge' | 'freezer' | 'pantry' | 'other';
   brand?: string;
   price?: number;
   notes?: string;
-  expiryType?: 'best_by' | 'use_by';
+  /** Matches backend BestByOrUseBy enum (camelCase): bestBy | useBy */
+  bestByOrUseBy?: 'bestBy' | 'useBy';
 }
 
 export type CreateItemInput = Omit<InventoryItem, 'id' | 'householdId'>;
