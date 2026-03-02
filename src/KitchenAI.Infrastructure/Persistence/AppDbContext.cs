@@ -17,6 +17,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<Notification> Notifications => Set<Notification>();
     public DbSet<AnalyticsEvent> AnalyticsEvents => Set<AnalyticsEvent>();
     public DbSet<AdminSetting> AdminSettings => Set<AdminSetting>();
+    public DbSet<MagicLinkToken> MagicLinkTokens => Set<MagicLinkToken>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -137,6 +138,15 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
             entity.HasKey(s => s.Key);
             entity.Property(s => s.Key).IsRequired().HasMaxLength(128);
             entity.Property(s => s.Value).IsRequired().HasMaxLength(512);
+        });
+
+        // MagicLinkToken
+        modelBuilder.Entity<MagicLinkToken>(entity =>
+        {
+            entity.HasKey(t => t.Id);
+            entity.Property(t => t.Email).IsRequired().HasMaxLength(256);
+            entity.Property(t => t.Token).IsRequired().HasMaxLength(128);
+            entity.HasIndex(t => t.Token).IsUnique();
         });
     }
 }
