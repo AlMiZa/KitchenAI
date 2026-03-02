@@ -93,9 +93,15 @@ export default function RecipesPage() {
     onSuccess: (data) => setGenerated(data),
   });
 
+  const [saveError, setSaveError] = useState<string | null>(null);
+
   const saveMut = useMutation({
     mutationFn: (recipe: Recipe) => saveRecipe(householdId!, recipe),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['recipes', householdId] }),
+    onSuccess: () => {
+      setSaveError(null);
+      queryClient.invalidateQueries({ queryKey: ['recipes', householdId] });
+    },
+    onError: (err: Error) => setSaveError(err.message),
   });
 
   const display = generated.length > 0 ? generated : saved;
@@ -130,6 +136,14 @@ export default function RecipesPage() {
           >
             {t('common.retry')}
           </button>
+        </div>
+      )}
+
+      {/* Save error (e.g. duplicate) */}
+      {saveError && (
+        <div className="mb-4 flex items-center justify-between rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
+          <span>{saveError}</span>
+          <button onClick={() => setSaveError(null)} className="ml-4 font-bold">✕</button>
         </div>
       )}
 

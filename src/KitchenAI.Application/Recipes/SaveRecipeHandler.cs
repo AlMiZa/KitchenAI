@@ -3,6 +3,7 @@ using KitchenAI.Application.Persistence;
 using KitchenAI.Domain.Entities;
 using KitchenAI.Domain.Enums;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace KitchenAI.Application.Recipes;
 
@@ -13,6 +14,14 @@ public class SaveRecipeHandler(IAppDbContext db) : IRequestHandler<SaveRecipeCom
     public async Task<RecipeDto> Handle(SaveRecipeCommand request, CancellationToken cancellationToken)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(request.RecipeData.Title);
+
+        // Prevent duplicates: check if a recipe with the same title already exists for this household
+        var exists = await db.Recipes.AnyAsync(
+            r => r.HouseholdId == request.HouseholdId && r.Title == request.RecipeData.Title,
+            cancellationToken);
+
+        if (exists)
+            throw new InvalidOperationException($"The recipe with \"{request.RecipeData.Title}\" is already saved.");
 
         var recipe = new Recipe
         {

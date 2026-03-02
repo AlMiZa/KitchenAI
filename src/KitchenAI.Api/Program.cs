@@ -111,6 +111,7 @@ app.UseExceptionHandler(errorApp =>
             ValidationException => StatusCodes.Status400BadRequest,
             UnauthorizedAccessException => StatusCodes.Status401Unauthorized,
             KeyNotFoundException => StatusCodes.Status404NotFound,
+            InvalidOperationException => StatusCodes.Status409Conflict,
             RateLimitExceededException => StatusCodes.Status429TooManyRequests,
             _ => StatusCodes.Status500InternalServerError
         };
