@@ -1,4 +1,5 @@
 using KitchenAI.Application.Persistence;
+using KitchenAI.Application.Resources;
 using KitchenAI.Application.Services;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -24,7 +25,7 @@ public class LoginHandler(IAppDbContext db, ITokenService tokenService, ILogger<
         if (user is null || !BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash))
         {
             logger.LogWarning("Failed login attempt for email {Email}.", request.Email);
-            throw new UnauthorizedAccessException("Invalid credentials.");
+            throw new UnauthorizedAccessException(Messages.Get("Auth_InvalidCredentials"));
         }
 
         // Resolve the primary household (owned first, then first membership)

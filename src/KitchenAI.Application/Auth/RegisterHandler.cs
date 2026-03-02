@@ -1,6 +1,7 @@
 using System.Text.Json;
 using KitchenAI.Application.Exceptions;
 using KitchenAI.Application.Persistence;
+using KitchenAI.Application.Resources;
 using KitchenAI.Application.Services;
 using KitchenAI.Domain.Entities;
 using MediatR;
@@ -20,7 +21,7 @@ public class RegisterHandler(IAppDbContext db, ITokenService tokenService)
         ArgumentException.ThrowIfNullOrWhiteSpace(request.DisplayName);
 
         if (await db.Users.AnyAsync(u => u.Email == request.Email, cancellationToken))
-            throw new ValidationException("Email already in use");
+            throw new ValidationException(Messages.Get("Auth_EmailAlreadyInUse"));
 
         var user = new User
         {

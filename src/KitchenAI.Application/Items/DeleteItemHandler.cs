@@ -1,5 +1,6 @@
 using System.Text.Json;
 using KitchenAI.Application.Persistence;
+using KitchenAI.Application.Resources;
 using KitchenAI.Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -14,7 +15,7 @@ public class DeleteItemHandler(IAppDbContext db) : IRequestHandler<DeleteItemCom
     {
         var item = await db.Items
             .FirstOrDefaultAsync(i => i.Id == request.ItemId && i.HouseholdId == request.HouseholdId, cancellationToken)
-            ?? throw new KeyNotFoundException($"Item {request.ItemId} not found.");
+            ?? throw new KeyNotFoundException(Messages.Get("Item_NotFound", request.ItemId));
 
         item.IsArchived = true;
         item.UpdatedAt = DateTime.UtcNow;

@@ -1,5 +1,6 @@
 using System.Text.Json;
 using KitchenAI.Application.Persistence;
+using KitchenAI.Application.Resources;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,7 +13,7 @@ public class ExportUserDataHandler(IAppDbContext db) : IRequestHandler<ExportUse
     public async Task<string> Handle(ExportUserDataQuery request, CancellationToken cancellationToken)
     {
         var user = await db.Users.FindAsync([request.UserId], cancellationToken)
-            ?? throw new KeyNotFoundException($"User {request.UserId} not found.");
+            ?? throw new KeyNotFoundException(Messages.Get("User_NotFound", request.UserId));
 
         var households = await db.Households
             .Where(h => h.OwnerUserId == user.Id)

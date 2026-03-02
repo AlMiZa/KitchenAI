@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+
+  <!-- Auth -->
+  <data name="Auth_EmailAlreadyInUse" xml:space="preserve">
+    <value>Email already in use</value>
+  </data>
+  <data name="Auth_InvalidCredentials" xml:space="preserve">
+    <value>Invalid credentials.</value>
+  </data>
+  <data name="Auth_UserNotFound" xml:space="preserve">
+    <value>User not found.</value>
+  </data>
+
+  <!-- Items -->
+  <data name="Item_NotFound" xml:space="preserve">
+    <value>Item {0} not found.</value>
+  </data>
+  <data name="Items_MergeRequiresTwo" xml:space="preserve">
+    <value>At least two items are required to merge.</value>
+  </data>
+  <data name="Items_MergeNotEnough" xml:space="preserve">
+    <value>Could not find at least two matching items to merge.</value>
+  </data>
+
+  <!-- Recipes -->
+  <data name="Recipe_NotFound" xml:space="preserve">
+    <value>Recipe {0} not found.</value>
+  </data>
+  <data name="Recipe_RateLimitExceeded" xml:space="preserve">
+    <value>Recipe generation quota exceeded for household {0}.</value>
+  </data>
+  <data name="Recipe_LlmOutputInvalid" xml:space="preserve">
+    <value>LLM output invalid and adapter returned fewer than 2 fallback recipes.</value>
+  </data>
+  <data name="Recipe_TooFewGenerated" xml:space="preserve">
+    <value>Recipe generation returned fewer than 2 recipes.</value>
+  </data>
+
+  <!-- Households -->
+  <data name="Household_NotFound" xml:space="preserve">
+    <value>Household {0} not found.</value>
+  </data>
+
+  <!-- Users -->
+  <data name="User_NotFound" xml:space="preserve">
+    <value>User {0} not found.</value>
+  </data>
+
+  <!-- Notifications -->
+  <data name="Notification_Test" xml:space="preserve">
+    <value>This is a test notification.</value>
+  </data>
+
+  <!-- Unit labels -->
+  <data name="Unit_g" xml:space="preserve">
+    <value>g</value>
+  </data>
+  <data name="Unit_kg" xml:space="preserve">
+    <value>kg</value>
+  </data>
+  <data name="Unit_ml" xml:space="preserve">
+    <value>ml</value>
+  </data>
+  <data name="Unit_L" xml:space="preserve">
+    <value>L</value>
+  </data>
+  <data name="Unit_pcs" xml:space="preserve">
+    <value>pcs</value>
+  </data>
+</root>
