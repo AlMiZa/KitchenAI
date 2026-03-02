@@ -13,6 +13,7 @@ public class LlmService : ILlmService
     /// <inheritdoc/>
     public Task<List<GeneratedRecipeDto>> GenerateRecipesAsync(
         IList<Item> items,
+        IList<GeneratedRecipeDto> candidateRecipes,
         RecipeConstraints constraints,
         CancellationToken cancellationToken = default)
     {
