@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import {
   getNotifications,
@@ -23,6 +24,7 @@ export default function NotificationBell() {
   const { t, i18n } = useTranslation();
   const { householdId } = useAuth();
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
   const [open, setOpen] = useState(false);
 
   const { data: notifications = [] } = useQuery({
@@ -39,6 +41,11 @@ export default function NotificationBell() {
     onSuccess: () =>
       queryClient.invalidateQueries({ queryKey: ['notifications', householdId] }),
   });
+
+  const handleNotificationClick = () => {
+    setOpen(false);
+    navigate('/inventory?expiringSoon=true');
+  };
 
   return (
     <div className="relative">
@@ -110,13 +117,18 @@ export default function NotificationBell() {
                   key={n.id}
                   className={`px-4 py-3 flex gap-3 ${!n.read ? 'bg-green-50' : ''}`}
                 >
-                  <span className="text-lg leading-none">{typeIcon(n.type)}</span>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm text-gray-800 break-words">{n.message}</p>
-                    <p className="text-xs text-gray-400 mt-0.5">
-                      {formatDateTime(n.createdAt, i18n.language)}
-                    </p>
-                  </div>
+                  <button
+                    onClick={handleNotificationClick}
+                    className="flex gap-3 w-full text-left hover:bg-green-100 -mx-4 -my-3 px-4 py-3 transition-colors"
+                  >
+                    <span className="text-lg leading-none">{typeIcon(n.type)}</span>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm text-gray-800 break-words">{n.message}</p>
+                      <p className="text-xs text-gray-400 mt-0.5">
+                        {formatDateTime(n.createdAt, i18n.language)}
+                      </p>
+                    </div>
+                  </button>
                 </li>
               ))
             )}
